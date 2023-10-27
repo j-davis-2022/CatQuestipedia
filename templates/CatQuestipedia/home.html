@@ -1,0 +1,149 @@
+{% extends 'CatQuestipedia/base-template.html' %}
+{% load static %}
+{% load kebabify %}
+
+{% block title %} Cat Questipedia Home {% endblock %}
+
+{%  block content %}
+    <article class="hero padding">
+        <h2>Welcome to Cat Questipedia!</h2>
+        <p>The go-to spot for info on the Cat Quest franchise.</p>
+    </article>
+    <article class="browse">
+        <h3 class="section-header padding">For your browsing pleasure...</h3>
+        <div class="browse-cards grid scroll-snap">
+            <section class="link-card grid">
+                <h4 class="link-card-title">Games</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn" href="{% url 'catquestversion' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Characters</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn" href="{% url 'characters' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Enemies</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Equipment</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn"  href="{% url 'equipment' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Spells</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn"  href="{% url 'spells' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Quests</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn" href="{% url 'quests' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Locations</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="link-card grid">
+                <h4 class="link-card-title">Mew Game</h4>
+                <div class="link-btns flex flex-column">
+                    {% for item in Game %}
+                        <a class="link-card-link-btn" href="{% url 'mewgame' gameid=item.title %}">{{ item.title }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </article>
+    <h2 class="section-header left-padding">More Information...</h2>
+    <article class="margin lore">
+        <h3 class="padding section-header lore-header">The Lore</h3>
+        <section class="lore-game">
+            <h4 class="padding lore-subheader">Cat Quest</h4>
+            <p class="big-text padding lore-text">
+                The old masters, often regarded as a fairy tale, have vanished and left the land filled with ruins. They appear to have had advanced magical and/or technological capabilities; they could record videos that would only be played when stumbled upon by a dragonblood. What they normally did and what happened to them is unknown. <br/>
+                One day, dragons, driven away from their home by danger, made Felingard their new home. According to legend, they terrorized the place, making it hard to live there. According to one of the few remaining dragons, the opposite was true. They were kind to those they met, and even taught the old masters about magic! One old master in particular, Aelius, managed to infuse cats with dragon magic; he called these cats the Dragonblood. Aelius loved his Dragonbloods, and one in particular, Drakoth, loved him very much. When the old masters grew fearful of Aelius and sealed him away, Drakoth vowed to free him one day. <br/><br/>
+                And so the game begins. You, the hero, are sailing on a boat with your sister when a forboding white cat appears before you, and with his magic powers, kidnaps your sister without approaching your boat. He then uses more magic to destroy your boat, leaving you lost at sea. Luckily, Spirry, a guardian spirit was watching and came to help you not just reach land, but also to rescue your sister from the evil paws of the white cat named Drakoth.
+            </p>
+        </section>
+        <section class="lore-game">
+            <h4 class="padding">Cat Quest II</h4>
+            <p class="padding lore-text">
+                Once, there was a powerful blade which the kingdom of cats and the kingdom of dogs were fighting over like, well, cats and dogs. Then one day, the blade shattered and their world was never the same again. As a great evil reigned, the kings of the two kingdoms fought against it, but eventually fell victim to its corruption. A prophecy foretold that one day, the kings would return, and that is where this game begins.
+                After being informed that their thrones have been taken by evil kings named Lioner the Purrsecutor and Wolfen the Labrathor, the freshly reincarnated kings vow to help the subjects they love and care for, and so their adventure begins.
+            </p>
+        </section>
+        <section class="lore-game">
+            <h4 class="padding">Cat Quest: Pirates of the Purribean</h4>
+            <p class="padding lore-text">
+                As this game has not been released yet, not much is known about the lore surrounding it. According to the trailer, your character is a feline pirate trying to find an ancient relic before those searching for it to bring about the Apawcalypse.
+            </p>
+        </section>
+    </article>
+    <article class="devs">
+        <h3 class="section-header left-padding">The Developers</h3>
+        <div class="">
+            <p class="padding dev-blurb">
+                The Cat Quest franchise is made by a small group of developers called <a href="https://thegentlebros.com/" target="blank">The Gentlebros</a>. According to their website, Cat Quest was inspired by other video games. In fact, Cat Quest has "the overworld of Final Fantasy, the combat and exploration of Zelda, and the open world of Skyrim all in one package". The only game mentioned on their website that is not a member of the Cat Quest franchise is <a href="https://thegentlebros.com/slashyhero/" target="blank">Slashy Hero</a>. The specific devs who worked on the Cat Quest games are as follows:
+            </p> 
+        </div>
+        <div class="diagonal flex flex-row">
+            <ul class="dev-list flex flex-row scroll-snap">
+                <div class="game-dev-list">
+                    <h4 class="bottom-padding">Cat Quest Team:</h4>
+                    <li>Desmond Wong</li>
+                    <li>Leon Ho</li>
+                    <li>Nursyazana</li>
+                    <h5 class="padding">Others mentioned in the credits:</h5>
+                    <li>Zminusone Sound</li>
+                    <li>George Bullen</li>
+                    <li>Ohrwurm</li>
+                    <li>Ax_Grinder</li>
+                    <li>Dylan Hicks</li>
+                    <li>Pim Choosith</li>
+                </div>
+                <div class="game-dev-list">
+                    <h4 class="left-padding bottom-padding">Cat Quest II Team:</h4>
+                    <li>Desmond Wong</li>
+                    <li>Leon Ho</li>
+                    <li>Nursyazana binte Zainal</li>
+                    <li>Cheng Ding Xiang</li>
+                    <h5 class="padding">Others mentioned in the credits:</h5>
+                    <li>Brian Havey (Zminusone)</li>
+                    <li>Dylan Hicks</li>
+                </div>
+            </ul>
+                <img src="{{ gentle_img.image }}" alt="Gentlebro's Logo" sizes="(width <= 750px) 50vw, (width <= 1260px) 34vw, 40vw"/>
+        </div>
+    </article>
+    <article class="padding this-site">
+        <h3 class="section-header blur-background">This Site</h3>
+        <p class="padding blur-background">
+            This site is made by a fan of the Cat Quest series. While it would probably be easier to add information as games come out if anyone who uses this site could edit, they do not have the coding prowess to manage that yet. They still might miss details here and there, or not be as fast at data collection as you, so if you see an error, or have some information that isn't on the site at all, please <a href="mailto:jodavis0322@gmail.com">contact them</a>!<br/>
+            As for privacy information, this site does not track you. It does not register your cookies. It does not sell your data. This is a fan site made out of love for a video game that is not as well-known as it deserves. Making a profit off of it in any way, like advertisements or data harvesting, feels weird.
+        </p>
+    </article>
+{% endblock %}

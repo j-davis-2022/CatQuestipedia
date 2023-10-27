@@ -1,0 +1,37 @@
+{% extends "CatQuestipedia/base-template.html" %}
+{% load kebabify %}
+
+{% block title %} Quests {% endblock %}
+
+{% block content %}
+    <h4>{{ game }} Quests</h4>
+    <section>
+        <section>
+            <h5>Main Quests</h5>
+            <div>
+                {% for item in Gameid.quests.all %}
+                    {% if item.type == "main" %}
+                        <div>
+                            <a href="{% url "quest-detail" gameid=game questid=item.name %} ">{{ item.name }}</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h5>Side Quests</h5>
+            <div>
+                {% for value in Side_Quest_lines %}
+                    <div>
+                        {% filter_quests_by_line Gameid value as item %}
+                        {% for value in item %}
+                            <div>
+                                <a href="{% url "quest-detail" game value.name %}">{{ value.name }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+{% endblock %}

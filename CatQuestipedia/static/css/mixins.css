@@ -1,0 +1,75 @@
+.triangle-top {
+  position: relative;
+}
+
+.triangle-top::before {
+  position: absolute;
+  top: -85px;
+  left: 25%;
+  box-sizing: border-box;
+  content: "";
+  border-radius: 5px 0;
+  border: 2rem solid transparent;
+  border-bottom-color: #FFF4C8;
+  border-right-color: #FFF4C8;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate(45deg);
+  box-shadow: 5px 5px #FFE066;
+}
+
+.triangle-top::after {
+  position: absolute;
+  top: -85px;
+  right: 25%;
+  box-sizing: border-box;
+  content: "";
+  border-radius: 5px 0;
+  border: 2rem solid transparent;
+  border-bottom-color: #FFF4C8;
+  border-right-color: #FFF4C8;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate(45deg);
+  box-shadow: 5px 5px #FFE066;
+}
+
+.triangle-bottom {
+  position: relative;
+}
+
+.triangle-bottom::before {
+  position: absolute;
+  bottom: -7rem;
+  left: calc(4rem + 25%);
+  box-sizing: border-box;
+  content: "";
+  border-radius: 5px 0;
+  border: 2rem solid transparent;
+  border-right-color: #FFF4C8;
+  border-bottom-color: #FFF4C8;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate(225deg);
+  box-shadow: 5px 5px #FFE066;
+}
+
+.triangle-bottom::after {
+  position: absolute;
+  bottom: -7rem;
+  right: 25%;
+  box-sizing: border-box;
+  content: "";
+  border-radius: 5px 0;
+  border: 2rem solid transparent;
+  border-right-color: #FFF4C8;
+  border-bottom-color: #FFF4C8;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate(225deg);
+  box-shadow: 5px 5px #FFE066;
+}/*# sourceMappingURL=mixins.css.map */

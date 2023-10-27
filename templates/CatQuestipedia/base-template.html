@@ -1,0 +1,89 @@
+{% load static %}
+{% load kebabify %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="height=device-height, initial-scale=1.0">
+    <script type="text/javascript" src="{% static '/javascript/script.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>{% block title %}Cat Questipedia{% endblock %}</title>
+</head>
+<body>
+    <div class="page-grid grid">
+        <nav class="header">
+            <ul class="flex flex-row list-none flex-center-v">
+                <li class="logo flex flex-center-v"><a href="{% url 'home' %}">Cat Questipedia</a></li>
+                <div class="flex flex-row flex-center-v banner">
+                    <form method="GET" action="{% url 'search' %}" name="search">
+                        {% csrf_token %}
+                        <input class="search-input" type="search" placeholder="Search..." name="searchedfor"/>
+                        <input class="search-btn" type="submit" value="Search"/>
+                    </form>
+                </div>
+                <div class="login flex flex-column flex-center-v">
+                    {% if user.is_authenticated %}
+                        <li><a href="/logout">Log Out</a></li>
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                    {% else %}
+                        <li><a href="/login">Log In</a></li>
+                        <li><a href="{% url 'create' %}">Create Account</a></li>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+        <aside class="sidebar padding">
+            <p>Pick a theme!</p>
+            <p>Note: this will be stored in your browser. This makes the theme you choose load automatically whenever you visit this site.</p>
+            <form>
+                <label>Light Mode</label>
+                <input type="radio" value="light-mode" class="theme" name="theme" checked/>
+                <label>Dark Mode</label>
+                <input type="radio" value="dark-mode" class="theme" name="theme"/>
+            </form>
+            {% block pagenav %}
+                <p>This is the Sidebar.<br/>Don't know what to put here yet. Hah.</p>
+            {% endblock %}
+        </aside>
+        <main class="main-content">
+            {% block content %}
+                <p class="padding">How did you get here?</p>
+                {% for something in test %}
+                    <p>{{ something.img.url }}</p>
+                    <img src="{{ something.img.url }}" alt="something"/>
+                {% endfor %}
+            {% endblock %}
+        </main>
+        <footer class="footer padding">
+            <div></div>
+            <div>
+                <p>
+                    Last Edit: {{ modified }}
+                </p>
+                <br/>
+                <hr/>
+                <br/>
+                <p>
+                    Credits:
+                </p>
+                <ul class="left-padding">
+                    <li>Site Coding and Design: <a href="mailto:jodavis0322@gmail.com">Jo Davis</a> (they/them)</li>
+                    <li>Art: <a href="https://lampdisease.neocities.org/" target="blank">lampdisease</a> (they/them)</li>
+                </ul>
+                <br/>
+                <hr/>
+                <br/>
+                <p>
+                    License: Cat Questipedia © 2023 by Jo Davis is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="blank"> CC BY-SA 4.0 </a>
+                </p>
+                <br/>
+                <p>
+                    Privacy Policy: No data harvesting of any sort. We only keep the information you explicitly give us, like a username and password.
+                </p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

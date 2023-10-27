@@ -1,0 +1,41 @@
+@mixin triangle($color: #FFF4C8, $side-1: top, $side-2: left, $rotate:0deg) {
+  box-sizing: border-box;
+  content: "";
+  border-radius: 5px 0;
+  border: 2rem solid transparent;
+  border-#{$side-1}-color: $color;
+  border-#{$side-2}-color: $color;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate($rotate);
+  box-shadow: 5px 5px #FFE066;
+}
+
+@mixin triangles($rotate, $position-before-1, $position-before-1-value, $position-before-2, $position-before-2-value, $position-after-1, $position-after-1-value, $position-after-2, $position-after-2-value, $color: #FFF4C8, $side-1: top, $side-2:left) {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    #{$position-before-1}: $position-before-1-value;
+    #{$position-before-2}: $position-before-2-value;
+
+    @include triangle($color, $side-1, $side-2, $rotate);
+  }
+
+  &::after {
+    position: absolute;
+    #{$position-after-1}: $position-after-1-value;
+    #{$position-after-2}: $position-after-2-value;
+    
+    @include triangle($color, $side-1, $side-2, $rotate);
+  }
+}
+
+.triangle-top {
+  @include triangles($rotate:45deg, $position-before-1:top, $position-before-1-value:-85px, $position-before-2:left, $position-before-2-value:25%, $position-after-1:top, $position-after-1-value:-85px, $position-after-2:right, $position-after-2-value:25%, $side-1:bottom, $side-2:right);
+}
+
+.triangle-bottom {
+  @include triangles($rotate:225deg, $position-before-1:bottom, $position-before-1-value:-7rem, $position-before-2:left, $position-before-2-value:calc(4rem + 25%), $position-after-1:bottom, $position-after-1-value:-7rem, $position-after-2:right, $position-after-2-value:25%, $side-1:right, $side-2:bottom);
+}

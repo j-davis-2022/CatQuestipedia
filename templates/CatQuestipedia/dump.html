@@ -1,0 +1,96 @@
+{%for item in search_game %}
+        <a href="{% url 'catquestversion' item.title %}">
+            <section>
+                {{ item.title }}
+            </section>
+        </a>
+    {% endfor %}
+    {% for key, values in search_items %}
+        {% for value in values %}
+            <a href="{% url key value.game.title value.name %}">
+                <section>
+                    {{value.name}}
+                </section>
+            </a>
+        {% endfor %}
+    {% endfor %}
+    {% for value in urls %}
+        <a href="{% url value.url_path value.game %}">
+            <section>
+                {{ value.url_path }}, {{ value.game }}
+            </section>
+        </a>
+    {% endfor %}
+
+    <section>
+        <li><a href="javascript:void(0)">Browse</a>
+            <div>
+                {% for item in Game %}
+                    <section>
+                        <a href="{% url 'catquestversion' gameid=item.title %}">{{ item.title}}</a>
+                        <div class="flex-row flex-directory">
+                            <a href="{% url 'characters' gameid=item.title %}">Characters</a>
+                            <a href="{% url 'equipment' gameid=item.title %}">Equipment</a>
+                            <a href="{% url 'spells' gameid=item.title %}">Spells</a>
+                            <a href="{% url 'quests' gameid=item.title %}">Quests</a>
+                            <a href="{% url 'mewgame' gameid=item.title %}">Mew Game Modes</a>
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>
+        </li>
+    </section>
+
+    # search_results = Equipment.objects.annotate(rank=Case(When(Exists(search_results), then=SearchRank(SearchVector("name", weight="A"), query)), default=SearchRank(SearchVector("name", weight="A"), query), output_field=FloatField())).values('name', 'rank').order_by("-rank")
+                # search_results.annotate(search_results.values('rank'))[:1]
+                #  + Subquery(search_results.annotate(old_rank=F('rank')).values('old_rank')[:1])
+                # SearchRank(SearchVector("name", weight="A"), query), 
+            # print(search_results.values('rank'))
+            """ if item == shlex_search[0]:
+                    search_results = Equipment.objects.annotate(rank=SearchRank(SearchVector("name", weight="A"), query), ).values('name', 'rank').order_by("-rank")
+                    print(item)
+                    print(search_results)
+                elif item != shlex_search[0]:
+                    # Equipment.objects.filter(name__search=item).annotate(old_rank=Subquery(search_results.annotate(old_rank=F('rank')).values('old_rank')[:1])).values('old_rank', 'name')
+                    search_results = search_results.annotate(item_name=Case(When(item_name=Subquery(Equipment.objects.filter(name=OuterRef('name')).values('name')[:1]), then=Subquery(Equipment.objects.filter(name=OuterRef('name')).values('name')[:1])), default=Subquery(Equipment.objects.filter(name=OuterRef('name')).values('name')[:1])), new=SearchRank(SearchVector("name", weight="A") + SearchVector("set", weight="B"), query) + Subquery(search_results.annotate(old_rank=OuterRef('rank')).values('old_rank')[:1])).values('item_name', 'new').order_by("-new")
+                    
+                    # Equipment.objects.annotate(updated_rank=SearchRank(SearchVector("name", weight="A"), query) + Subquery(Equipment.objects.filter(name__search=item).values('name').annotate(old_rank=Subquery(search_results.annotate(old_rank=F('rank')).values('old_rank')[:1])).values('old_rank')[:1]), ).filter(updated_rank__gte=0.1).values('name', 'updated_rank').order_by("-updated_rank")
+                    print(item)
+                    # print(search_results.annotate(item_name=Subquery(Equipment.objects.filter(name=OuterRef('name')).values('name')[:1]), old=Subquery(search_results.annotate(old_rank=OuterRef('rank')).values('old_rank')[:1])).values('item_name', 'old').order_by("-old")) """
+                    connection = psycopg2.connect(database=env("DB_NAME"), 
+                    host=env("DB_HOST"), 
+                    user=env("DB_USER"),
+                    password=env("DB_PASSWORD"),
+                    port=env("DB_PORT"),)
+re_search_2 = re.sub(r'([A-Za-z][^ |&]*)', r'%\1%', re_search)
+print(re_search_2)
+cursor = connection.cursor()
+cursor.execute("""
+     SELECT title, id FROM "CatQuestipedia_game" AS game WHERE to_tsvector('synopsis') @@ to_tsquery('%(query)s') UNION 
+     SELECT name, id FROM "CatQuestipedia_characters" AS characters WHERE name LIKE '%(query)s' UNION 
+     SELECT name, id FROM "CatQuestipedia_equipment" AS equipment WHERE set LIKE '%(query)s' UNION 
+     SELECT name, id FROM "CatQuestipedia_spells" AS spells  WHERE name LIKE '%(query)s' UNION 
+     SELECT name, id FROM "CatQuestipedia_quests" AS quests WHERE name LIKE '%(query)s'
+     """, {'query':AsIs(re_search_2)}) #{'query':AsIs(re_search)}
+#  UNION SELECT * FROM "CatQuestipedia_mewgame" AS mewgame
+print("HELLO?! ", cursor.fetchall())
+cursor.close()
+connection.close()
+
+for search_terms in shlex_search:
+                search = Game.objects.filter(Q(title__icontains=search_terms) | Q(synopsis__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("title", weight="A") + SearchVector("synopsis", weight="B",) + SearchVector("tags", weight="A",), query), url_name=Value('catquestversion', output_field=CharField()), url_param_1=F('title'), url_param_2=Value('none', output_field=CharField()), url_display=Value('Game', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('title', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank').union(
+                    Characters.objects.filter(Q(name__icontains=search_terms) | Q(description__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("description", weight="B") + SearchVector("tags", weight="A",), query), url_name=Value('character-detail', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Characters', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), 
+                    Enemies.objects.filter(Q(name__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("tags", weight="A",), query), url_name=Value('enemy-detail', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Enemies', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), 
+                    Equipment.objects.filter(Q(name__icontains=search_terms) | Q(set__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("set", weight="B") + SearchVector("tags", weight="A",), query), url_name=Value('equipment-item', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Equipment', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), 
+                    Spells.objects.filter(Q(name__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("tags", weight="A",), query), url_name=Value('spell-detail', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Spells', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), 
+                    Quests.objects.filter(Q(name__icontains=search_terms) | Q(quest_line__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("quest_line", weight="B") + SearchVector("tags", weight="A",), query), url_name=Value('quest-detail', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Quests', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), 
+                    Locations.objects.filter(Q(name__icontains=search_terms) | Q(tags__name__icontains=search_terms)).annotate(rank=SearchRank(SearchVector("name", weight="A") + SearchVector("tags", weight="A",), query), url_name=Value('location-detail', output_field=CharField()), url_param_1=Subquery(Game.objects.filter(pk=OuterRef('game')).values('title')[:1]), url_param_2=F('name'), url_display=Value('Locations', output_field=CharField()), search_tags=ArrayAgg("tags__name")).values('name', 'url_name', 'url_display', 'url_param_1', 'url_param_2', 'search_tags', 'rank'), ).order_by("-rank")
+                total_search[search_terms] = search
+            for item in shlex_search:
+                for game in games:
+                    try:
+                        reverse(item, kwargs={"gameid":game})
+                        url = {"url_path": item, "game":game["title"]}
+                        urls.append(url)
+                    except:
+                        continue

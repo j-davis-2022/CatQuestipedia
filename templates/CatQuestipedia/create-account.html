@@ -1,0 +1,58 @@
+{% extends 'CatQuestipedia/base-template.html' %}
+{% load static %}
+{% load kebabify %}
+
+{% block content %}
+    <article class="padding create-account-background">
+        <section class="padding create-account">
+            <h3 class="bottom-padding">Create Account:</h3>
+            <p>Why create an account? Track your progress in the Cat Quest Games! Keep tabs on what equipment and spells you have, their levels, and the quests you've completed!</p><hr/>
+            <form class="create-account-form" method="POST">
+                {% csrf_token %}
+                <div class="grid create-account-input">
+                    <label class="padding">E-mail:</label>
+                    {% comment %} <input placeholder="email..." type="text"/> {% endcomment %}
+                    {{ form.email }}
+                </div>
+                <div class="left-padding left-margin">{{ form.email.help_text }}</div>
+                <div class="left-padding left-margin error-message">
+                    {{ form.errors.email }}
+                </div><hr/>
+                <div class="grid create-account-input">
+                    <label class="padding">Username: *</label>
+                    {{ form.username }}
+                    {% comment %} <input placeholder="username..." type="text"/> {% endcomment %}
+                </div>
+                <p class="left-padding">{{ form.username.help_text }}</p>
+                <div class="left-padding left-margin error-message">
+                    {{ form.errors.username }}
+                </div><hr/>
+                <div class="grid create-account-input">
+                    <label class="padding">Password: *</label>
+                    {{ form.password1 }}
+                    {% comment %} <input placeholder="password..." type="password"/> {% endcomment %}
+                </div>
+                <div class="left-padding left-margin">{{ form.password1.help_text }}</div>
+                <div class="left-padding left-margin error-message">
+                    {{ form.errors.password1 }}
+                </div><hr/>
+                <div class="grid create-account-input">
+                    <label class="padding">Confirm Password: *</label>
+                    {{ form.password2 }}
+                    {% comment %} <input placeholder="password..." type="password"/> {% endcomment %}
+                </div>
+                <p class="left-padding">{{ form.password2.help_text }}</p>
+                <div class="left-padding left-margin error-message">
+                    {{ form.errors.password2 }}
+                </div><hr/>
+                <div class="flex flex-center-h">
+                    <input type="submit" class="create-account-btn" value="Create Account!"/>
+                </div>
+            </form><hr/>
+            <div class="flex flex-center-h flex-center-v">
+                <p>Already have an account? Sign in!</p>
+                <a href="/login" class="button-link left-margin">Log In</a>
+            </div>
+        </section>
+    </article>
+{% endblock %}

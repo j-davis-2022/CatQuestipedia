@@ -1,0 +1,35 @@
+{% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
+{% load kebabify %}
+
+{% block title %} {{ item.name }} {% endblock %}
+
+{% block content %}
+    <h4>{{ item.name }}</h4>
+    <div>
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+        <p>Defense: {{ item.defense }}</p>
+        <p>Health: {{ item.health }}</p>
+        <p>Physical Attack: {{ item.physicalattack }}</p>
+        <p>Magic: {{ item.magic }}</p>
+        {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <label>Do I own this item?</label>
+                <input type="checkbox" name="{{ item.name }}1" class="equipment_owned_input"/>
+                <label>Select a playthrough:</label>
+                <select name="{{ item.name }}2" onchange="updateLvl()" class="playthrough-selector">
+                    <option value="" selected disabled hidden>Select a Playthrough:</option>
+                    {% for playthrough in user_playthroughs %}
+                        <option class="playthrough-option" name="{{ playthrough.name }}" value="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                    {% endfor %}
+                </select>
+                <label>Item's Level</label>
+                <input type="number" min="1" max="{{ item.maxlvl }}" name="{{ item.name }}3" class="equipment_level_input"/>
+                <button type="submit" value="Save" title="save">Save</button>
+            </form>
+        {% else %}
+            <p>Log in to track your equipment and their levels!</p>
+        {% endif %}
+    </div>
+{% endblock %}

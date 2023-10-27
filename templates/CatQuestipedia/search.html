@@ -1,0 +1,126 @@
+{% extends 'CatQuestipedia/base-template.html' %}
+{% load static %}
+{% load kebabify %}
+
+{% block title %} Search {% endblock %}
+
+{%  block content %}
+    <article class="search-background">
+        {% if searched_for %}
+            <h3 class="padding">You searched for: 
+                {% for item in searched_for %}
+                    {{ item }} 
+                {% endfor %}
+            </h3>
+        {% else %}
+            <h3 class="padding">You didn't search.</h3>
+        {% endif %}
+        <ul class="left-padding bottom-padding search-results list-none">
+            {% for item, value in search.items %}
+                {% if search|get_dict_count:item == 0 %}
+                {% else %}
+                    <h3>Results for: {{ item }}: ({{ search|get_dict_count:item }} results)</h3>
+                {% endif %}
+                {% for result, values in value.items %}
+                    {% if values.url_param_2 != "none" %}
+                        <li class="search-item">
+                            <a href="{% url values.url_name values.url_param_1 values.url_param_2 %}">{{ result.name }}</a><br/>
+                            <p>Tags: </p>
+                            <ul class="list-none flex flex-row tag-list scroll-snap">
+                                {% for tag in values.tags %}
+                                    <li><a class="searched" method="GET" onclick="searched('{{ tag }}')" value="{{ tag }}">{{ tag }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="search-item">
+                            <a href="{% url values.url_name values.url_param_1 %}">{{ result }}</a><br/>
+                            <p>Tags: </p>
+                            <ul class="list-none flex flex-row tag-list scroll-snap">
+                                {% for tag in values.tags %}
+                                    <li><a class="searched" method="GET" onclick="searched('{{ tag }}')" value="{{ tag }}">{{ tag }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        <section class="search-issues">
+            <h4 class="left-padding">Not what you're looking for?</h4>
+            <p class="padding">
+                This is a basic search function, so it's not perfect. I am looking for ways to improve it, though, so hopefully it will be better soon! As of right now, the search function is sensitive to spelling. If you don't know how to spell the full item you are searching for, type as much as you know.<br/>
+                In the mean time, maybe try browsing.
+            </p>
+        </section>
+        <article class="browse">
+            <h4 class="left-padding margin">Not what you're looking for? Browse here:</h4>
+            <div class="browse-cards grid scroll-snap">
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Games</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'catquestversion' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Characters</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'characters' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Enemies</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'enemies' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Equipment</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn"  href="{% url 'equipment' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Spells</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn"  href="{% url 'spells' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Quests</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'quests' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Locations</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'locations' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="link-card grid">
+                    <h4 class="link-card-title">Mew Game</h4>
+                    <div class="link-btns flex flex-column">
+                        {% for item in Game %}
+                            <a class="link-card-link-btn" href="{% url 'mewgame' gameid=item.title %}">{{ item.title }}</a>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </article>
+    </article>
+{% endblock %}

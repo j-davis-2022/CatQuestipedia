@@ -1,0 +1,18 @@
+{% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
+{% load kebabify %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            <input placeholder="Playthrough Name" type="text" name="playthrough-name"/>
+            <select name="playthrough-game">
+                {% for item in Game %}
+                    <option name="{{ item.title }}">{{ item.title }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Submit"/>
+        </form>
+    {% endif %}
+{% endblock %}

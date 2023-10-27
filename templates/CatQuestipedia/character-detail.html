@@ -1,0 +1,10 @@
+{% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
+
+{% block title %} {{ Character.name }} {% endblock %}
+
+{% block content %}
+    <img src="{{ Character.image.url }}" alt="{{ Character.name }}">
+    <p>{{ Character.name }}</p>
+    <p>{{ Character.description }}</p>
+{% endblock %}

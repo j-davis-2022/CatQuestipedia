@@ -1,0 +1,19 @@
+{% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
+
+{% block title %}{{ quest.name }}{% endblock %}
+{% block content %}
+    <h4>{{ quest.name }}: {{ quest.type|title }}</h4>
+    <p>Tasks:</p>
+    <ol>
+        {% for item in tasks %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ol>
+    <p>Reward(s):</p>
+    <ul>
+        <li>Experience: {{ quest.xpreward }}</li>
+        <li>Gold: {{ quest.goldreward }}</li>
+        <li>Other: {{ quest.miscreward }}</li>
+    </ul>
+{% endblock %}
