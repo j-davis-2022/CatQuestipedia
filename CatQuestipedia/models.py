@@ -133,15 +133,13 @@ class Enemies(models.Model):
     @staticmethod
     def search_rank(query):
         rank = {}
-        query_items = Enemies.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(locations_found__name__icontains=query)).annotate(enemy_name=F('name'), enemy_id=F("id"), enemy_location=ArrayAgg('locations_found__name'), enemy_tags=ArrayAgg("tags__name")).values("enemy_name", "enemy_id", "enemy_location", "enemy_tags")
+        query_items = Enemies.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query)).annotate(enemy_name=F('name'), enemy_id=F("id"), enemy_tags=ArrayAgg("tags__name")).values("enemy_name", "enemy_id", "enemy_tags")
         for item in query_items:
             item_rank = 0.0
             if query in item["enemy_name"]:
                 item_rank += 1
-            if query in item["enemy_location"]:
-                item_rank += 0.75
             if query in item["enemy_tags"]:
-                item_rank += 0.125
+                item_rank += 0.75
             rank[item["enemy_id"]] = item_rank
         rank = sorted(rank.items(), key = lambda x: x[1])
         return rank
@@ -321,13 +319,13 @@ class Locations(models.Model):
 
 class MewGame(models.Model):
     game = models.ForeignKey(Game, related_name="mewgame", on_delete=models.CASCADE)
-    mode_name = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=50, null=True, blank=True)
     mode_description = models.CharField(max_length=200, null=True, blank=True)
     rewards = models.BooleanField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):
-        return self.mode_name
+        return self.name
     
     def all_tags(self):
         tag_list = []
@@ -338,16 +336,16 @@ class MewGame(models.Model):
     @staticmethod
     def search_rank(query):
         rank = {}
-        query_items = MewGame.objects.filter(Q(mode_name__icontains=query) | Q(tags__name__iexact=query) | Q(mode_description=query)).annotate(name=F('mode_name'), description=F('mode_description'), mewgame_tags=ArrayAgg("tags__name")).values("name", "description", "mewgame_tags")
+        query_items = MewGame.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(mode_description=query)).annotate(mode_name=F('name'), description=F('mode_description'), mewgame_tags=ArrayAgg("tags__name")).values("mode_name", "description", "mewgame_tags")
         for item in query_items:
             item_rank = 0.0
-            if query in item["name"]:
+            if query in item["mode_name"]:
                 item_rank += 1
             if query in item["mewgame_tags"]:
                 item_rank += 0.75
             if query in item["description"]:
                 item_rank += 0.25
-            rank[item["name"]] = item_rank
+            rank[item["mode_name"]] = item_rank
         rank = sorted(rank.items(), key = lambda x: x[1])
         return rank
 

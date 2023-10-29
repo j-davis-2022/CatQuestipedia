@@ -136,7 +136,7 @@ def search(response):
             for iteration in searched:
                 for key, value in MewGame.search_rank(iteration):
                     item = MewGame.objects.get(name=key)
-                    spell_search_results[item] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.mode_name}
+                    spell_search_results[item] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.name}
             search_results["MewGame"] = mewgame_search_results
     return render(response, 'CatQuestipedia/search.html', {"Game": games, "searched_for": searched, "search": search_results,"modified": datestamp, })
 
@@ -250,6 +250,9 @@ def location_detail(response, gameid, locationid):
 
 def mewgame(response, gameid):
     return render(response, 'CatQuestipedia/mew-game.html', {"game": str(gameid), "Game": games, "modified": datestamp})
+
+def mewgame_detail(response, gameid):
+    return render(response, 'CatQuestipedia/mewgame-detail.html', {"game": str(gameid), "Game": games, "modified": datestamp})
 
 def mass_update(request, id):
     playthrough = Playthroughs.objects.get(id=id)

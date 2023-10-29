@@ -56,7 +56,12 @@ urlpatterns = [
                         ]
                     ),
                 ),
-                path("mewgame/", views.mewgame, name="mewgame"),
+                path("mewgame/", include (
+                    [
+                        path("", views.mewgame, name="mewgame"),
+                        path("<str:mewgameid>/", views.mewgame_detail, name="mewgame-detail"),
+                    ]
+                )),
             ]
         ),
     ),
