@@ -82,6 +82,37 @@ class Characters(models.Model):
         rank = sorted(rank.items(), key = lambda x: x[1])
         return rank
 
+class Bosses(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to="bosses", null=True, blank=True)
+    character = models.ForeignKey(Characters, null=True, blank=True, on_delete=models.CASCADE)
+    attacks = models.CharField(max_length=100)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tags, blank=True)
+
+    def __str__(self):
+        return self.name
+    
+    def all_tags(self):
+        tag_list = []
+        for tag in self.tags.all():
+            tag_list.append(tag.name)
+        return tag_list
+    
+    @staticmethod
+    def search_rank(query):
+        rank = {}
+        query_items = Bosses.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query)).annotate(boss_name=F('name'), boss_tags=ArrayAgg("tags__name")).values("boss_name", "boss_tags")
+        for item in query_items:
+            item_rank = 0.0
+            if query in item["boss_name"]:
+                item_rank += 1
+            if query in item["boss_tags"]:
+                item_rank += 0.75
+            rank[item["boss_id"]] = item_rank
+        rank = sorted(rank.items(), key = lambda x: x[1])
+        return rank
+
 class Enemies(models.Model):
     name = models.CharField(max_length=50)
     enemy = models.ImageField(upload_to="enemies", null=True, blank=True)
