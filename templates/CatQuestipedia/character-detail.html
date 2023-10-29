@@ -7,4 +7,9 @@
     <img src="{{ Character.image.url }}" alt="{{ Character.name }}">
     <p>{{ Character.name }}</p>
     <p>{{ Character.description }}</p>
+    {% if boss %}
+        <p>This character is a boss.</p>
+        <p>{{ boss.name }}</p>
+        <p>{{ boss.attacks }}</p>
+    {% endif %}
 {% endblock %}

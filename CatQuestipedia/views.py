@@ -152,9 +152,11 @@ def characters(response, gameid):
     return render(response, 'CatQuestipedia/characters.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "modified": datestamp, })
 
 def character_detail(response, gameid, characterid):
-    character = Characters.objects.get(name=characterid)
+    gameidvar = Game.objects.get(title=gameid)
+    character = Characters.objects.get(name=characterid, game=gameidvar)
+    boss = character.bosses_set.first() #type:ignore
     return render(response, "CatQuestipedia/character-detail.html", {"game": str(gameid), "Game": games,
-                                                             "Character": character, "modified": datestamp, })
+                                                             "Character": character, "boss": boss, "modified": datestamp, })
 
 def enemies(response, gameid):
     gameidvar = Game.objects.get(title=gameid)
