@@ -132,7 +132,7 @@ STATIC_ROOT = '/CatQuestipedia/static/'
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/CatQuestipedia/static/images/'
+MEDIA_ROOT = 'CatQuestipedia/static/images/'
 
 MEDIA_URL = '/images/'
 
