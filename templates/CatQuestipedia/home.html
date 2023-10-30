@@ -32,7 +32,7 @@
                 <h4 class="link-card-title">Enemies</h4>
                 <div class="link-btns flex flex-column">
                     {% for item in Game %}
-                        <a class="link-card-link-btn">{{ item.title }}</a>
+                        <a class="link-card-link-btn" href="{% url 'enemies' gameid=item.title %}">{{ item.title }}</a>
                     {% endfor %}
                 </div>
             </section>
@@ -64,7 +64,7 @@
                 <h4 class="link-card-title">Locations</h4>
                 <div class="link-btns flex flex-column">
                     {% for item in Game %}
-                        <a class="link-card-link-btn">{{ item.title }}</a>
+                        <a class="link-card-link-btn" href="{% url 'locations' gameid=item.title %}">{{ item.title }}</a>
                     {% endfor %}
                 </div>
             </section>

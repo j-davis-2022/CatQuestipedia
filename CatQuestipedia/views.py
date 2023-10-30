@@ -136,7 +136,7 @@ def search(response):
             for iteration in searched:
                 for key, value in MewGame.search_rank(iteration):
                     item = MewGame.objects.get(name=key)
-                    spell_search_results[item] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.name}
+                    mewgame_search_results[item] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.name}
             search_results["MewGame"] = mewgame_search_results
     return render(response, 'CatQuestipedia/search.html', {"Game": games, "searched_for": searched, "search": search_results,"modified": datestamp, })
 
@@ -164,7 +164,7 @@ def enemies(response, gameid):
 
 def enemy_detail(response, gameid, enemyid):
     gameidvar = Game.objects.get(title=gameid)
-    enemy = Enemies.objects.filter(game=gameidvar).get(name=enemyid)
+    enemy = Enemies.objects.get(name=enemyid, game=gameidvar)
     return render(response, 'CatQuestipedia/enemy-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "enemy": enemy,"modified": datestamp, })
 
 
@@ -175,8 +175,7 @@ def equipment(response, gameid):
         if item["set"] not in values:
             value = item["set"]
             values.append(value)
-    return render(response, 'CatQuestipedia/equipment.html', {"game": str(gameid), "Gameid": gameidvar, "Game": games,
-                                                      "Not_full_set": values, "modified": datestamp})
+    return render(response, 'CatQuestipedia/equipment.html', {"game": str(gameid), "Gameid": gameidvar, "Game": games, "Not_full_set": values, "modified": datestamp})
 
 
 def equipmentitem(request, gameid, itemid):

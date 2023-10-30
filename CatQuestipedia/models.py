@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser # , User
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.db.models import Q, F, OuterRef, Subquery, Value, CharField
+from django.db.models.functions import Coalesce
 from django.contrib.postgres.aggregates import ArrayAgg
 
 # Create your models here.
@@ -254,7 +255,7 @@ class Quests(models.Model):
     @staticmethod
     def search_rank(query):
         rank = {}
-        query_items = Quests.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(quest_line__icontains=query) | Q(location__name__icontains=query) | Q(monster_list__name__icontains=query) | Q(character_list__name__icontains=query)).annotate(quest=F('name'), line=F('quest_line'), quest_tags=ArrayAgg("tags__name"), quest_loc=Subquery(Locations.objects.filter(id=OuterRef('location')).values('name')[:1]), monsters=ArrayAgg("monster_list__name"), characters=ArrayAgg("character_list__name")).values("quest", "line", "quest_tags", "quest_loc", "monsters", "characters")
+        query_items = Quests.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(quest_line__icontains=query) | Q(location__name__icontains=query) | Q(monster_list__name__icontains=query) | Q(character_list__name__icontains=query)).annotate(quest=F('name'), line=F('quest_line'), quest_tags=ArrayAgg("tags__name"), quest_loc=Coalesce(F('location__name'), Value("unknown")), monsters=ArrayAgg("monster_list__name"), characters=ArrayAgg("character_list__name")).values("quest", "line", "quest_tags", "quest_loc", "monsters", "characters")
         for item in query_items:
             item_rank = 0.0
             if query in item["quest"]:
@@ -269,7 +270,7 @@ class Quests(models.Model):
                 item_rank += 0.125
             if query in item["characters"]:
                 item_rank += 0.125
-            rank[item["quest"]] = item_rank
+            rank[item["quest"]] = item["quest_loc"]
         rank = sorted(rank.items(), key = lambda x: x[1])
         return rank
 
