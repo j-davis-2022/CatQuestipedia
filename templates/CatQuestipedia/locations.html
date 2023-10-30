@@ -1,3 +1,9 @@
 {% extends 'CatQuestipedia/base-template.html' %}
 {% load static %}
 {% load kebabify %}
+
+{% block content %}
+    {% for location in Gameid.location.all %}
+        <p>{{ location }}</p>
+    {% endfor %}
+{% endblock %}

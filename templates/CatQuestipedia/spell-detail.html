@@ -1,0 +1,7 @@
+{% extends "CatQuestipedia/base-template.html" %}
+
+{% block content %}
+    <h4>{{ spell.name }}</h4>
+    <img src="{{ spell.image.url }}"/>
+    <p>{{ spell.effect }}</p>
+{% endblock %}

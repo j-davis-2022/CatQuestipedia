@@ -4,4 +4,11 @@
 
 {% block content %}
     <h4>{{ game }} Spells</h4>
+    {% for spell in Gameid.spells.all %}
+        <a href="{% url 'spell-detail' gameid=game spellid=spell.name %}">
+            <img src="{{ spell.image.url }}"/>
+            <p>{{spell.name}}</p>
+            <p>{{ spell.effect }}</p>
+        </a>
+    {% endfor %}
 {% endblock %}

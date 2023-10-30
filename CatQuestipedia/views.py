@@ -155,8 +155,7 @@ def character_detail(response, gameid, characterid):
     gameidvar = Game.objects.get(title=gameid)
     character = Characters.objects.get(name=characterid, game=gameidvar)
     boss = character.bosses_set.first() #type:ignore
-    return render(response, "CatQuestipedia/character-detail.html", {"game": str(gameid), "Game": games,
-                                                             "Character": character, "boss": boss, "modified": datestamp, })
+    return render(response, "CatQuestipedia/character-detail.html", {"game": str(gameid), "Game": games, "Character": character, "boss": boss, "modified": datestamp, })
 
 def enemies(response, gameid):
     gameidvar = Game.objects.get(title=gameid)
@@ -216,7 +215,8 @@ def spells(response, gameid):
 
 def spell_detail(response, gameid, spellid):
     game_spells = Game.objects.get(title=gameid)
-    return render(response, "CatQuestipedia/spells.html", {"game": str(gameid), "Game": games, "Gameid": game_spells, "modified": datestamp, })
+    spell = Spells.objects.get(name=spellid, game=game_spells)
+    return render(response, "CatQuestipedia/spell-detail.html", {"game": str(gameid), "Game": games, "Gameid": game_spells, "spell":spell, "modified": datestamp, })
 
 
 def quests(response, gameid):
@@ -226,8 +226,7 @@ def quests(response, gameid):
     for item in Quests.objects.filter(game=game_quests).filter(type="side").values():
         if item["quest_line"] not in values:
             values.append(item["quest_line"])
-    return render(response, 'CatQuestipedia/quests.html', {"game": str(gameid), "Game": game, "Gameid": game_quests,
-                                                   "Side_Quest_lines": values, "modified": datestamp, })
+    return render(response, 'CatQuestipedia/quests.html', {"game": str(gameid), "Game": game, "Gameid": game_quests, "Side_Quest_lines": values, "modified": datestamp, })
 
 
 def quest_detail(response, gameid, questid):
@@ -236,8 +235,7 @@ def quest_detail(response, gameid, questid):
     quest = Quests.objects.filter(game=gameidvar).get(name=questid)
     task = quest.tasks
     tasks = str(task).split(", ")
-    return render(response, 'CatQuestipedia/quest-detail.html', {"game": str(gameid), "Game": game, "quest": quest,
-                                                         "tasks": tasks, "modified": datestamp, })
+    return render(response, 'CatQuestipedia/quest-detail.html', {"game": str(gameid), "Game": game, "quest": quest, "tasks": tasks, "modified": datestamp, })
 
 def locations(response, gameid):
     gameidvar = Game.objects.get(title=gameid)

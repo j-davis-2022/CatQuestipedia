@@ -1,3 +1,22 @@
 {% extends 'CatQuestipedia/base-template.html' %}
 {% load static %}
 {% load kebabify %}
+
+{% block content %}
+    <p>{{ location.name }}: {{ location.type }}</p>
+    <ul>
+        <li>Normal Chests: {{ location.normal_chests }}</li>
+        <li>Key Chests: {{ location.key_chests }}</li>
+        <li>Completion Chests: {{ location.completion_chests }}</li>
+    </ul>
+    <ul>
+        {% for enemy in location.enemies_there.all %}
+            <li>{{ enemy.name }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        {% for enemy in location.mew_game_enemy.all %}
+            <li>{{ enemy.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

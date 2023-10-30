@@ -52,7 +52,7 @@ urlpatterns = [
                 path("locations/", include(
                         [
                             path("", views.locations, name="locations"),
-                            path("<str:locationid>/", views.character_detail, name="location-detail"),
+                            path("<str:locationid>/", views.location_detail, name="location-detail"),
                         ]
                     ),
                 ),
