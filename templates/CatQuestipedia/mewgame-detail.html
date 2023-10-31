@@ -1,3 +1,19 @@
 {% extends "CatQuestipedia/base-template.html" %}
 {% load static %}
 {% load kebabify %}
+
+{% block content %}
+    <h3>{{ mode.name }}</h3>
+    <p>{{ mode.mode_description }}</p>
+    {% if mode.rewards == False %}
+        <p>You will not get rewards if you apply this meowdifier to your Mew Game playthrough.</p>
+    {% else %}
+        <p>You will recieve rewards fur completing a Mew Game playthrough with this meowdifier.</p>
+    {% endif %}
+    <section>
+        {% if mode.user_edits %}
+            {{ mode.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='MewGame' itemid=mode.name %}">edit</a>!
+    </section>
+{% endblock %}

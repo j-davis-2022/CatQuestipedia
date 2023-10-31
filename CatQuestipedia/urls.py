@@ -9,6 +9,8 @@ urlpatterns = [
     path("create account/", views.create, name="create"),
     path("profile/", views.profile, name="profile"),
     path("new playthrough/", views.new_playthrough, name="new_playthrough"),
+    path("edit/<str:gameid>/", views.edit_game, name="game_edit"),
+    path("edit/<str:gameid>/<str:modelid>/<str:itemid>/", views.edit_item, name="item_edit"),
     path("playthrough/<int:id>/mass update/", views.mass_update, name="mass_update"),
     path('', include("django.contrib.auth.urls")),
     path("<str:gameid>/", include(

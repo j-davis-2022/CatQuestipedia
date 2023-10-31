@@ -12,4 +12,10 @@
         <p>{{ boss.name }}</p>
         <p>{{ boss.attacks }}</p>
     {% endif %}
+    <section>
+        {% if Character.user_edits %}
+            {{ Character.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='characters' itemid=Character.name %}">edit</a>!
+    </section>
 {% endblock %}

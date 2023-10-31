@@ -4,6 +4,8 @@ const tags = document.getElementsByClassName("searched");
 
 const searchBox = document.getElementsByClassName("search-input");
 
+const previewer = document.getElementsByClassName("preview-content");
+
 const storeTheme = function (theme) {
     localStorage.setItem("preferredTheme", theme);
 };
@@ -28,7 +30,7 @@ const openTab = function (tab) {
 
 const updateLvl = function() {
     const selector = document.getElementsByClassName("playthrough-selector");
-    var selectorValue = selector[0].value;
+    var selectorValue = selector[0].options[selector[0].selectedIndex].getAttribute("name");
     document.getElementsByClassName("equipment_level_input")[0].placeholder = selectorValue;
     if (selectorValue != 0) {
         document.getElementsByClassName("equipment_owned_input")[0].checked = true;
@@ -37,9 +39,34 @@ const updateLvl = function() {
     };
 };
 
+const updateSpellLvl = function() {
+    const selector = document.getElementsByClassName("playthrough-selector");
+    var selectorValue = selector[0].options[selector[0].selectedIndex].getAttribute("name");
+    document.getElementsByClassName("spell_level_input")[0].placeholder = selectorValue;
+    if (selectorValue != 0) {
+        document.getElementsByClassName("spell_known_input")[0].checked = true;
+    } else {
+        document.getElementsByClassName("spell_known_input")[0].checked = false;
+    };
+};
+
+const updateQuest = function() {
+    const selector = document.getElementsByClassName("playthrough-selector");
+    var selectorValue = selector[0].options[selector[0].selectedIndex].getAttribute("name");
+    if (selectorValue != 0) {
+        document.getElementsByClassName("quest-completed-input")[0].checked = true;
+    } else {
+        document.getElementsByClassName("quest-completed-input")[0].checked = false;
+    };
+};
+
 const searched = function(value) {
     searchBox[0].value = value;
     document.search.submit();
+};
+
+const updatePreview = function(content) {
+    previewer[0].innerHTML = content;
 };
 
 window.onload = function () {

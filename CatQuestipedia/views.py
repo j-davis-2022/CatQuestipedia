@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.apps import apps
 from .models import *
 import os
 import datetime
@@ -144,7 +145,7 @@ def search(response):
 def catquestversion(response, gameid):
     gameidvar = Game.objects.get(title=gameid)
     img = gameidvar.image
-    return render(response, 'CatQuestipedia/game.html', {"name": gameid, "Game": games, "img": img,  "modified": datestamp, })
+    return render(response, 'CatQuestipedia/game.html', {"name": gameid, "Game": games, "Gameid": gameidvar, "img": img,  "modified": datestamp, })
 
 
 def characters(response, gameid):
@@ -191,7 +192,7 @@ def equipmentitem(request, gameid, itemid):
             else:
                 playthrough_levels[it.name] = 0
         if request.method == "POST":
-            playthrough = Playthroughs.objects.filter(user=user).filter(game = gameidvar).get(name = request.POST.get(item.name + "2"))
+            playthrough = Playthroughs.objects.filter(user=user).filter(game=gameidvar).get(name = request.POST.get(item.name + "2"))
             entry = UserEquipment.objects.filter(user=user).filter(playthrough=playthrough).filter(equipment=item)
             if item.name + "1" in request.POST and entry.exists() == True:
                 edit = UserEquipment.objects.filter(user=user).filter(playthrough=playthrough).get(equipment=item)
@@ -213,10 +214,35 @@ def spells(response, gameid):
     return render(response, "CatQuestipedia/spells.html", {"game": str(gameid), "Game": games, "Gameid": game_spells, "modified": datestamp, })
 
 
-def spell_detail(response, gameid, spellid):
+def spell_detail(request, gameid, spellid):
     game_spells = Game.objects.get(title=gameid)
     spell = Spells.objects.get(name=spellid, game=game_spells)
-    return render(response, "CatQuestipedia/spell-detail.html", {"game": str(gameid), "Game": games, "Gameid": game_spells, "spell":spell, "modified": datestamp, })
+    user = request.user
+    if user.is_authenticated:
+        user_playthroughs = Playthroughs.objects.filter(user=user).filter(game=game_spells)
+        playthrough_levels = {}
+        for it in user_playthroughs:
+            if it.user_spells.filter(playthrough=it).filter(spell=spell).exists():
+                playthrough_level = it.user_spells.filter(playthrough=it).get(spell=spell)
+                playthrough_levels[it.name] = playthrough_level.spell_level
+            else:
+                playthrough_levels[it.name] = 0
+        if request.method == "POST":
+            playthrough = Playthroughs.objects.get(user=user, game = game_spells, name=request.POST.get(spell.name + "2"))
+            entry = UserSpells.objects.filter(user=user, playthrough=playthrough, spell=spell)
+            if spell.name + "1" in request.POST and entry.exists() == True:
+                edit = UserSpells.objects.get(user=user, playthrough=playthrough, spell=spell)
+                edit.spell_level = int(request.POST.get(spell.name + "3"))
+                edit.save()
+            elif spell.name + "1" in request.POST and entry.exists() == False:
+                new = UserSpells.objects.create(user=user, playthrough=playthrough, spell=spell, spell_level=int(request.POST.get(spell.name + "3")))
+                new.save()
+                playthrough.user_spells.add(new)
+                playthrough.save()
+    else:
+        user_playthroughs = None
+        playthrough_levels = {}
+    return render(request, "CatQuestipedia/spell-detail.html", {"game": str(gameid), "Game": games, "Gameid": game_spells, "spell":spell, "user_playthroughs": user_playthroughs, "playthrough_levels": playthrough_levels, "modified": datestamp, })
 
 
 def quests(response, gameid):
@@ -229,13 +255,38 @@ def quests(response, gameid):
     return render(response, 'CatQuestipedia/quests.html', {"game": str(gameid), "Game": game, "Gameid": game_quests, "Side_Quest_lines": values, "modified": datestamp, })
 
 
-def quest_detail(response, gameid, questid):
+def quest_detail(request, gameid, questid):
     game = Game.objects.values()
     gameidvar = Game.objects.get(title=gameid)
     quest = Quests.objects.filter(game=gameidvar).get(name=questid)
     task = quest.tasks
     tasks = str(task).split(", ")
-    return render(response, 'CatQuestipedia/quest-detail.html', {"game": str(gameid), "Game": game, "quest": quest, "tasks": tasks, "modified": datestamp, })
+    user = request.user
+    if user.is_authenticated:
+        user_playthroughs = Playthroughs.objects.filter(user=user).filter(game=gameidvar)
+        playthrough_levels = {}
+        for it in user_playthroughs:
+            if it.user_quests.filter(playthrough=it, quest=quest).exists():
+                playthrough_levels[it.name] = 1
+            else:
+                playthrough_levels[it.name] = 0
+        print(playthrough_levels)
+        if request.method == "POST":
+            playthrough = Playthroughs.objects.get(user=user, game = gameidvar, name = request.POST.get(quest.name + "1"))
+            entry = UserQuests.objects.filter(user=user).filter(playthrough=playthrough).filter(quest=quest)
+            if (quest.name + "2") in request.POST and entry.exists() == True:
+                delete = UserQuests.objects.get(quest=quest, playthrough=playthrough, user=user)
+                playthrough.user_quests.remove(delete)
+                delete.delete()
+            elif str(quest.name + "2") in request.POST and entry.exists() == False:
+                new = UserQuests.objects.create(user=user, playthrough=playthrough, quest=quest)
+                new.save()
+                playthrough.user_quests.add(new)
+                playthrough.save()
+    else:
+        user_playthroughs = None
+        playthrough_levels = {}
+    return render(request, 'CatQuestipedia/quest-detail.html', {"game": str(gameid), "Game": game, "quest": quest, "tasks": tasks, "user_playthroughs": user_playthroughs, "playthrough_levels": playthrough_levels, "modified": datestamp, })
 
 def locations(response, gameid):
     gameidvar = Game.objects.get(title=gameid)
@@ -248,10 +299,30 @@ def location_detail(response, gameid, locationid):
 
 
 def mewgame(response, gameid):
-    return render(response, 'CatQuestipedia/mew-game.html', {"game": str(gameid), "Game": games, "modified": datestamp})
+    gameidvar = Game.objects.get(title=gameid)
+    return render(response, 'CatQuestipedia/mew-game.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "modified": datestamp})
 
-def mewgame_detail(response, gameid):
-    return render(response, 'CatQuestipedia/mewgame-detail.html', {"game": str(gameid), "Game": games, "modified": datestamp})
+def mewgame_detail(response, gameid, mewgameid):
+    gameidvar = Game.objects.get(title=gameid)
+    mode = MewGame.objects.filter(game=gameidvar).get(name=mewgameid)
+    return render(response, 'CatQuestipedia/mewgame-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "mode": mode, "modified": datestamp})
+
+def edit_game(request, gameid):
+    gameidvar = Game.objects.get(title=gameid)
+    if request.method == "POST":
+        new_content = request.POST.get("user-content")
+        gameidvar.user_edits = new_content
+        gameidvar.save()
+    return render(request, "CatQuestipedia/edit.html", {"game": str(gameid), "Game": games, "modified": datestamp, "article": gameidvar, })
+
+def edit_item(request, gameid, modelid, itemid):
+    gameidvar = Game.objects.get(title=gameid)
+    article = apps.get_model("CatQuestipedia", modelid.capitalize()).objects.get(name=itemid, game=gameidvar)
+    if request.method == "POST":
+        new_content = request.POST.get("user-content")
+        article.user_edits = new_content # type: ignore
+        article.save()
+    return render(request, "CatQuestipedia/edit.html", {"game": str(gameid), "Game": games, "modified": datestamp, "article": article, })
 
 def mass_update(request, id):
     playthrough = Playthroughs.objects.get(id=id)

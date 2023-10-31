@@ -5,6 +5,13 @@
 {% block title %} {{ name }} {% endblock %}
 
 {% block content %}
-    <h4>{{ name }}</h4>
+    <h4>{{ name }}: {{ Gameid.date_released }}</h4>
+    <p>{{ Gameid.synopsis }}</p>
     <img src="{{ img.url }}" alt="{{ name }} Art" width="200" />
+    <section>
+        {% if Gameid.user_edits %}
+            {{ Gameid.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'game_edit' gameid=name %}">edit</a>!
+    </section>
 {% endblock %}

@@ -21,7 +21,7 @@
                 <select name="{{ item.name }}2" onchange="updateLvl()" class="playthrough-selector">
                     <option value="" selected disabled hidden>Select a Playthrough:</option>
                     {% for playthrough in user_playthroughs %}
-                        <option class="playthrough-option" name="{{ playthrough.name }}" value="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                        <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
                     {% endfor %}
                 </select>
                 <label>Item's Level</label>
@@ -31,5 +31,11 @@
         {% else %}
             <p>Log in to track your equipment and their levels!</p>
         {% endif %}
+        <section>
+            {% if item.user_edits %}
+                {{ item.user_edits|safe }}<br/>
+            {% endif %}
+            Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='equipment' itemid=item.name %}">edit</a>!
+        </section>
     </div>
 {% endblock %}

@@ -1,7 +1,34 @@
 {% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
+{% load kebabify %}
 
 {% block content %}
     <h4>{{ spell.name }}</h4>
     <img src="{{ spell.image.url }}"/>
     <p>{{ spell.effect }}</p>
+    {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            <label>Do I know this spell?</label>
+            <input type="checkbox" name="{{ spell.name }}1" class="spell_known_input"/>
+            <label>Select a playthrough:</label>
+            <select name="{{ spell.name }}2" onchange="updateSpellLvl()"  class="playthrough-selector">
+                <option value="" selected disabled hidden>Select a Playthrough:</option>
+                    {% for playthrough in user_playthroughs %}
+                        <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                    {% endfor %}
+            </select>
+            <label>Spell's Level</label>
+            <input type="number" min="1" max="{{ spell.maxlvl }}" name="{{ spell.name }}3" class="spell_level_input"/>
+            <button type="submit" value="Save" title="save">Save</button>
+        </form>
+        {% else %}
+            <p>Log in to track your equipment and their levels!</p>
+        {% endif %}
+    <section>
+        {% if spell.user_edits %}
+            {{ spell.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Spells' itemid=spell.name %}">edit</a>!
+    </section>
 {% endblock %}

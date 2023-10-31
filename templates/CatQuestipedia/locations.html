@@ -4,6 +4,6 @@
 
 {% block content %}
     {% for location in Gameid.location.all %}
-        <p>{{ location }}</p>
+        <a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a>
     {% endfor %}
 {% endblock %}

@@ -50,10 +50,6 @@
         <main class="main-content">
             {% block content %}
                 <p class="padding">How did you get here?</p>
-                {% for something in test %}
-                    <p>{{ something.img.url }}</p>
-                    <img src="{{ something.img.url }}" alt="something"/>
-                {% endfor %}
             {% endblock %}
         </main>
         <footer class="footer padding">

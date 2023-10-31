@@ -1,5 +1,6 @@
 {% extends "CatQuestipedia/base-template.html" %}
 {% load static %}
+{% load kebabify %}
 
 {% block title %}{{ quest.name }}{% endblock %}
 {% block content %}
@@ -16,4 +17,26 @@
         <li>Gold: {{ quest.goldreward }}</li>
         <li>Other: {{ quest.miscreward }}</li>
     </ul>
+    {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            <label>Select a playthrough:</label>
+            <select name="{{ quest.name }}1" class="playthrough-selector" onchange="updateQuest()">
+                <option value="" selected disabled hidden>Select a Playthrough:</option>
+                    {% for playthrough in user_playthroughs %}
+                        <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                    {% endfor %}
+            </select>
+            <input type="checkbox" name="{{ quest.name }}2" class="quest-completed-input"/>
+            <button type="submit" value="Save" title="save">Save</button>
+        </form>
+    {% else %}
+        <p>Log in to track your equipment and their levels!</p>
+    {% endif %}
+    <section>
+        {% if quest.user_edits %}
+            {{ quest.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Quests' itemid=quest.name %}">edit</a>!
+    </section>
 {% endblock %}

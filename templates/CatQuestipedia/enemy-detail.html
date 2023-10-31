@@ -6,4 +6,10 @@
     <h3>{{ enemy.name }}</h3>
     <img src="{{ enemy.enemy.url }}" alt="{{ enemy.name }}"/>
     <p>{{ enemy.attacks }}</p>
+    <section>
+        {% if enemy.user_edits %}
+            {{ enemy.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Enemies' itemid=enemy.name %}">edit</a>!
+    </section>
 {% endblock %}

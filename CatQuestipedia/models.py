@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser # , User
 from django.conf import settings
 from django.db.models.signals import post_save
-from django.db.models import Q, F, OuterRef, Subquery, Value, CharField
+from django.db.models import Q, F, Value # , OuterRef, Subquery, CharField
 from django.db.models.functions import Coalesce
 from django.contrib.postgres.aggregates import ArrayAgg
 
@@ -23,6 +23,7 @@ class Game(models.Model):
     synopsis = models.CharField(max_length=1000, null=True)
     new_features = models.CharField(max_length=500, null=True, blank=True)
     date_released = models.DateField(null=True)
+    user_edits = models.CharField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):
@@ -56,6 +57,7 @@ class Characters(models.Model):
     description = models.CharField(max_length=100, null=True)
     type = models.CharField(max_length=10, null=True)
     game = models.ForeignKey(Game, related_name="characters", on_delete=models.CASCADE)
+    user_edits = models.CharField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):
@@ -120,6 +122,7 @@ class Enemies(models.Model):
     attacks = models.CharField(max_length=100)
     weak_to = models.CharField(max_length=100, null=True, blank=True)
     game = models.ForeignKey(Game, related_name="enemies", on_delete=models.CASCADE)
+    user_edits = models.CharField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):
@@ -159,6 +162,7 @@ class Equipment(models.Model):
     otherbuffs = models.CharField(max_length=200, null=True, blank=True)
     otherdebuffs = models.CharField(max_length=200, null=True, blank=True)
     maxlvl = models.IntegerField()
+    user_edits = models.CharField(null=True, blank=True)
     users = models.ManyToManyField(Users, through="UserEquipment")
     tags = models.ManyToManyField(Tags, blank=True)
 
@@ -193,6 +197,7 @@ class Spells(models.Model):
     game = models.ForeignKey(Game, related_name="spells", on_delete=models.CASCADE)
     effect = models.CharField(max_length=100)
     maxlvl = models.IntegerField()
+    user_edits = models.CharField(null=True, blank=True)
     users = models.ManyToManyField(Users, through="UserSpells")
     tags = models.ManyToManyField(Tags, blank=True)
 
@@ -240,6 +245,7 @@ class Quests(models.Model):
     xpreward = models.IntegerField(null=True, blank=True)
     goldreward = models.IntegerField(null=True, blank=True)
     miscreward = models.CharField(max_length=200, null=True, blank=True)
+    user_edits = models.CharField(null=True, blank=True)
     user_quests = models.ManyToManyField(Users, through="UserQuests")
     tags = models.ManyToManyField(Tags, blank=True)
 
@@ -288,6 +294,7 @@ class Locations(models.Model):
     normal_chests = models.IntegerField()
     key_chests = models.IntegerField()
     completion_chests = models.IntegerField()
+    user_edits = models.CharField(null=True, blank=True)
     game = models.ForeignKey(Game, related_name="location", on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tags, blank=True)
 
@@ -323,6 +330,7 @@ class MewGame(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True)
     mode_description = models.CharField(max_length=200, null=True, blank=True)
     rewards = models.BooleanField(null=True, blank=True)
+    user_edits = models.CharField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):

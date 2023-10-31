@@ -4,4 +4,7 @@
 
 {% block content %}
     <h4>{{ game }} Mew Game</h4>
+    {% for mode in Gameid.mewgame.all %}
+        <a href="{% url 'mewgame-detail' gameid=game mewgameid=mode.name %}">{{ mode.name }}</a>
+    {% endfor %}
 {% endblock %}

@@ -19,4 +19,10 @@
             <li>{{ enemy.name }}</li>
         {% endfor %}
     </ul>
+    <section>
+        {% if location.user_edits %}
+            {{ location.user_edits|safe }}<br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Locations' itemid=location.name %}">edit</a>!
+    </section>
 {% endblock %}
