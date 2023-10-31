@@ -4,6 +4,8 @@ from .models import *
 import os
 import datetime
 from .forms import create_account_form
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 # from django import request
 # from django.contrib.auth import login, authenticate
 # from django.http import HttpResponse
@@ -313,6 +315,7 @@ def edit_game(request, gameid):
         new_content = request.POST.get("user-content")
         gameidvar.user_edits = new_content
         gameidvar.save()
+        messages.add_message(request, messages.INFO, mark_safe(gameid + " has been updated. See <a href='/admin/CatQuestipedia/game/%s/change'>here</a>."%(gameidvar.id))) #type:ignore
     return render(request, "CatQuestipedia/edit.html", {"game": str(gameid), "Game": games, "modified": datestamp, "article": gameidvar, })
 
 def edit_item(request, gameid, modelid, itemid):
@@ -322,6 +325,7 @@ def edit_item(request, gameid, modelid, itemid):
         new_content = request.POST.get("user-content")
         article.user_edits = new_content # type: ignore
         article.save()
+        messages.add_message(request, messages.INFO, mark_safe(itemid + " has been updated. See <a href='/admin/CatQuestipedia/%s/%s/change'>here</a>."%(modelid.lower(), article.id))) #type:ignore
     return render(request, "CatQuestipedia/edit.html", {"game": str(gameid), "Game": games, "modified": datestamp, "article": article, })
 
 def mass_update(request, id):

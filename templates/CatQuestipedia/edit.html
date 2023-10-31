@@ -4,15 +4,13 @@
 
 {% block content %}
     <div class="preview-content padding">
-        {{ article.user_edits }}
+        {{ article.user_edits|safe }}
     </div>
     <form method="POST" class="edit-form">
         {% csrf_token %}
         <p>As you type, a preview of what the text will look like appears in the box above. You may use HTML tags to add visual elements to the content you would like to add. For example, &lt;hr/&gt; will display a horizontal line. Want a list? &lt;ul&gt; &lt;/ul&gt; defines a bulleted list where each &lt;li&gt;&lt;/li&gt; contained within is a list item. If you want a numbered list, simply exchange the ul with ol, and you have numbers.</p><hr/>
         <p>Now what information is missing on {{ article.name }}?</p>
-        <textarea class="content-editor" name="user-content" onkeyup="updatePreview(this.value)" rows="10" cols="80">
-            {{ article.user_edits }}
-        </textarea>
+        <textarea class="content-editor" name="user-content" onkeyup="updatePreview(this.value)" rows="10" cols="80">{{ article.user_edits }}</textarea>
         <input type="submit" value="Submit"/>
     </form>
 {% endblock %}
