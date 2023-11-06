@@ -18,9 +18,7 @@
         {% csrf_token %}
         <article class="padding tab-content" value="equipment">
             {% for item in equipment %}
-                {% with 'images/equipment/'|add:item.image  as image_static %}
-                    <img src="{% static image_static %}" alt="{{ item.name }}"/>
-                {% endwith %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
                 <p>{{ item.name }}<p>
                 <input type="checkbox" name="equipment-{{ item.name }}1" {% if item.id in owned_equipment.keys %} checked {% endif %}/>
                 <input type="number" name="equipment-{{ item.name }}2" {% if item.id in owned_equipment.keys %} placeholder="{{ owned_equipment|get_dict_value:item.id }}" {% else %} placeholder="{{ item.name }}" {% endif %}/>

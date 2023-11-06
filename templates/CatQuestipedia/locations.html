@@ -3,7 +3,51 @@
 {% load kebabify %}
 
 {% block content %}
-    {% for location in Gameid.location.all %}
-        <a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a>
-    {% endfor %}
+    {% comment %} <img class="location-map margin" src="{{ Gameid.map.url }}" alt="World Map" width="{{ Gameid.map.width }}" height="{{ Gameid.map.height}}"/> {% endcomment %}
+    <article class="left-margin location-content">
+        <h3 class="">{{ Gameid.title }} Locations:</h3>
+        <p class="big-text margin">
+            Locations are typically places marked on the map in the game. Common locations are towns where you can catnap, dungeons (caves and ruins) where you can defeat monsters and find chests with equipment, as well as coins. In addition to this, notable places in the overworld are also on the list. See below for a list of locations!
+        </p>
+        <section class="margin">
+            <hr/><h4 class="">Dungeons (Caves):</h4><hr/>
+            <ul class="left-margin grid locations-grid">
+                {% for location in Gameid.location.all %}
+                    {% if location.type == 'cave' %}
+                        <li class="left-margin flex flex-center-h"><a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="margin">
+            <hr/><h4 class="">Dungeons (Ruins):</h4><hr/>
+            <ul class="left-margin grid locations-grid">
+                {% for location in Gameid.location.all %}
+                    {% if location.type == 'ruins' %}
+                        <li class="left-margin flex flex-center-h"><a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="margin">
+            <hr/><h4 class="">Towns</h4><hr/>
+            <ul class="left-margin grid locations-grid">
+                {% for location in Gameid.location.all %}
+                    {% if location.type == 'town' %}
+                        <li class="left-margin flex flex-center-h"><a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="margin">
+            <hr/><h4 class="">Overworld</h4><hr/>
+            <ul class="left-margin grid locations-grid">
+                {% for location in Gameid.location.all %}
+                    {% if location.type == 'overworld' %}
+                        <li class="left-margin flex flex-center-h"><a href="{% url 'location-detail' gameid=game locationid=location.name %}">{{ location.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+    </article>
 {% endblock %}

@@ -3,12 +3,14 @@
 {% block title %} Spells {% endblock %}
 
 {% block content %}
-    <h4>{{ game }} Spells</h4>
-    {% for spell in Gameid.spells.all %}
-        <a href="{% url 'spell-detail' gameid=game spellid=spell.name %}">
-            <img src="{{ spell.image.url }}"/>
-            <p>{{spell.name}}</p>
-            <p>{{ spell.effect }}</p>
-        </a>
-    {% endfor %}
+    <h3 class="margin">{{ game }} Spells</h3>
+    <div class="grid spell-grid">
+        {% for spell in Gameid.spells.all %}
+            <a href="{% url 'spell-detail' gameid=game spellid=spell.name %}" class="spell-link margin padding">
+                <img src="{{ spell.image.url }}"/>
+                <p>{{spell.name}}</p>
+                <p>{{ spell.effect }}</p>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}

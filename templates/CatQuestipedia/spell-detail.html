@@ -3,29 +3,43 @@
 {% load kebabify %}
 
 {% block content %}
-    <h4>{{ spell.name }}</h4>
-    <img src="{{ spell.image.url }}"/>
-    <p>{{ spell.effect }}</p>
-    {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            <label>Do I know this spell?</label>
-            <input type="checkbox" name="{{ spell.name }}1" class="spell_known_input"/>
-            <label>Select a playthrough:</label>
-            <select name="{{ spell.name }}2" onchange="updateSpellLvl()"  class="playthrough-selector">
-                <option value="" selected disabled hidden>Select a Playthrough:</option>
-                    {% for playthrough in user_playthroughs %}
-                        <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
-                    {% endfor %}
-            </select>
-            <label>Spell's Level</label>
-            <input type="number" min="1" max="{{ spell.maxlvl }}" name="{{ spell.name }}3" class="spell_level_input"/>
-            <button type="submit" value="Save" title="save">Save</button>
-        </form>
-        {% else %}
-            <p>Log in to track your equipment and their levels!</p>
-        {% endif %}
-    <section>
+    <div class="margin spell-details flex flex-row">
+        <section class="spell-details-first-half">
+            <h3 class="margin">{{ spell.name }}</h3><hr/>
+            <img src="{{ spell.image.url }}" alt="{{ spell.name }}" class="margin"/><hr/>
+            <p class="margin">{{ spell.effect }}</p>
+        </section>
+        <section class="spell-details-second-half">
+            {% if user.is_authenticated %}
+                <form method="POST" class="spell-form">
+                    {% csrf_token %}
+                    <label>Select a playthrough:</label>
+                    <select name="{{ spell.name }}2" onchange="updateSpellLvl()"  class="playthrough-selector">
+                        <option value="" selected disabled hidden>Select a Playthrough:</option>
+                            {% for playthrough in user_playthroughs %}
+                                <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                            {% endfor %}
+                    </select><hr/>
+                    <label>Do I know this spell?</label>
+                    <input type="checkbox" name="{{ spell.name }}1" class="spell_known_input"/>
+                    <label>Spell's Level</label>
+                    <input type="number" min="1" max="{{ spell.maxlvl }}" name="{{ spell.name }}3" class="spell_level_input"/><hr/>
+                    <input type="submit" value="Save" title="save" class="margin"/>
+                </form>
+            {% else %}
+                <p class="margin">Log in to track your spells and their levels!</p>
+            {% endif %}
+        </section>
+    </div>
+    <section class="spell-tags margin">
+        <h4 class="margin">Tags:</h4><hr/>
+        <ul class="list-none flex flex-row tag-list scroll-snap padding">
+            {% for tag in spell.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="spell-user-edits">
         {% if spell.user_edits %}
             {{ spell.user_edits|safe }}<br/>
         {% endif %}

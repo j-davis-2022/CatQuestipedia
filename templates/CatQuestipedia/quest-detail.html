@@ -4,36 +4,70 @@
 
 {% block title %}{{ quest.name }}{% endblock %}
 {% block content %}
-    <h4>{{ quest.name }}: {{ quest.type|title }}</h4>
-    <p>Tasks:</p>
-    <ol>
-        {% for item in tasks %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ol>
-    <p>Reward(s):</p>
-    <ul>
-        <li>Experience: {{ quest.xpreward }}</li>
-        <li>Gold: {{ quest.goldreward }}</li>
-        <li>Other: {{ quest.miscreward }}</li>
-    </ul>
-    {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            <label>Select a playthrough:</label>
-            <select name="{{ quest.name }}1" class="playthrough-selector" onchange="updateQuest()">
-                <option value="" selected disabled hidden>Select a Playthrough:</option>
-                    {% for playthrough in user_playthroughs %}
-                        <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+    <h3 class="margin">{{ quest.name }}: {{ quest.type|title }}</h3>
+    <article>
+        <div class="margin quest-details flex flex-row">
+            <section>
+                <h4 class="margin">Tasks:</h4>
+                <ol class="margin left-padding">
+                    {% for item in tasks %}
+                        <li>{{ item }}</li>
                     {% endfor %}
-            </select>
-            <input type="checkbox" name="{{ quest.name }}2" class="quest-completed-input"/>
-            <button type="submit" value="Save" title="save">Save</button>
-        </form>
-    {% else %}
-        <p>Log in to track your equipment and their levels!</p>
-    {% endif %}
-    <section>
+                </ol><hr/>
+                <h4 class="margin">Reward(s):</h4>
+                <ul class="margin left-padding">
+                    <li>Experience: {{ quest.xpreward }}</li>
+                    <li>Gold: {{ quest.goldreward }}</li>
+                    <li>Other: {{ quest.miscreward }}</li>
+                </ul>
+            </section>
+            <section class="playthrough-tracker padding">
+                {% if user.is_authenticated %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label class="margin">Select a playthrough:</label>
+                        <select name="{{ quest.name }}1" class="playthrough-selector margin" onchange="updateQuest()">
+                            <option value="" selected disabled hidden>Select a Playthrough:</option>
+                                {% for playthrough in user_playthroughs %}
+                                    <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
+                                {% endfor %}
+                        </select><hr/>
+                        <label class="margin">Completed?</label>
+                        <input type="checkbox" name="{{ quest.name }}2" class="quest-completed-input margin"/><hr/>
+                        <input type="submit" value="Save" title="save" class="margin"/>
+                    </form>
+                {% else %}
+                    <p>Log in to track which quests you've completed!</p>
+                {% endif %}
+            </section>
+        </div>
+        <section class="grid quest-enemies">
+            <div>
+                <h4 class="bottom-padding">Regular Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in quest.monster_list.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4 class="bottom-padding">Mew Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in quest.mew_game_monster.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    </article>
+    <section class="quest-tags margin">
+        <ul class="list-none flex flex-row tag-list scroll-snap">
+            {% for tag in quest.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="quest-user-edits">
         {% if quest.user_edits %}
             {{ quest.user_edits|safe }}<br/>
         {% endif %}

@@ -3,8 +3,22 @@
 {% block title %} Mew Game {% endblock %}
 
 {% block content %}
-    <h4>{{ game }} Mew Game</h4>
-    {% for mode in Gameid.mewgame.all %}
-        <a href="{% url 'mewgame-detail' gameid=game mewgameid=mode.name %}">{{ mode.name }}</a>
-    {% endfor %}
+<div class="main-height flex flex-center-v">
+    <article class="article-content">
+        <h3 class="margin">{{ game }}: Mew Game</h3>
+        <p class="margin big-text mew-game-text">
+            Mew Game is a way to play the game that the player unlocks after completing the main game. In this feature, players can add rules or 'meowdifiers' to a new playthrough of the game. Mew Game is meant to be a challenge mode, so most meowdifiers make the game harder. This page tracks the various meowdifiers a player can impose on their new playthrough. The amount of meowdifiers you impose on your playthrough affect the rewards you get for completing the run.{% if game == 'Cat Quest' %} In Cat Quest, you will get a different equipment depending on whether you have 1, 2, or 3+ meowdifiers on your run. There is, however, a mode in Cat Quest that will make the game easier and negate any rewards you will get.{% elif game == 'Cat Quest II' %} In Cat Quest II, the number of meowdifiers you impose on yourself affect the level of the piece of equipment you get.{% endif %}
+        </p>
+        <ul class="margin grid mew-game-list">
+            {% for mode in Gameid.mewgame.all %}
+                <li class="margin flex flex-center-h"><a href="{% url 'mewgame-detail' gameid=game mewgameid=mode.name %}">{{ mode.name }}</a></li>
+                {% comment %} <ul class="list-none flex flex-row tag-list scroll-snap">
+                    {% for tag in mode.tags.all %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul> {% endcomment %}
+            {% endfor %}
+        </ul>
+    </article>
+</div>
 {% endblock %}

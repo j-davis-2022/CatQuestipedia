@@ -5,12 +5,22 @@
 {% block title %} {{ name }} {% endblock %}
 
 {% block content %}
-    <h4>{{ name }}: {{ Gameid.date_released }}</h4>
-    <p>{{ Gameid.synopsis }}</p>
-    <img src="{{ img.url }}" alt="{{ name }} Art" width="200" />
-    <section>
+    <h3 class="margin">{{ name }}: {{ Gameid.date_released }}</h3>
+    <section class="flex flex-row spell-details padding margin game-flex">
+        <p class="big-text flex flex-center-v padding">{{ Gameid.synopsis }}</p>
+        <img src="{{ img.url }}" alt="{{ name }} Art" width="200" />
+    </section>
+    <section class="margin spell-tags">
+        <h4 class="padding">Tags:</h4><hr/>
+        <ul class="list-none flex flex-row tag-list scroll-snap padding">
+            {% for tag in Gameid.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="padding spell-user-edits">
         {% if Gameid.user_edits %}
-            {{ Gameid.user_edits|safe }}<br/>
+            {{ Gameid.user_edits|safe }}<br/><hr/><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'game_edit' gameid=name %}">edit</a>!
     </section>

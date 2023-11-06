@@ -4,17 +4,48 @@
 {% block title %} {{ Character.name }} {% endblock %}
 
 {% block content %}
-    <img src="{{ Character.image.url }}" alt="{{ Character.name }}">
-    <p>{{ Character.name }}</p>
-    <p>{{ Character.description }}</p>
     {% if boss %}
-        <p>This character is a boss.</p>
-        <p>{{ boss.name }}</p>
-        <p>{{ boss.attacks }}</p>
+        <section class="margin spell-details flex flex-row">
+            <div class="spell-details-first-half padding">
+                <h3>{{ Character.name }}</h3>
+                <img src="{{ Character.image.url }}" alt="{{ Character.name }}">
+                <p>{{ Character.description }}</p>
+            </div>
+            <div class="spell-details-second-half padding">
+                <h4>This character is a boss.</h4>
+                <p>Name: {{ boss.name }}</p>
+                <p>Attacks: {{ boss.attacks }}</p>
+            </div>
+        </section>
+    {% else %}
+        <section class="margin spell-details">
+            <h3 class="margin">{{ Character.name }}</h3>
+            <img src="{{ Character.image.url }}" alt="{{ Character.name }}" class="margin"/>
+            <p class="margin">{{ Character.description }}</p>
+            
+        </section>
     {% endif %}
-    <section>
+    <section class="margin padding spell-tags">
+        {% if Character.quests_set.all %}
+            <h4 class="bottom-margin">Quests this character appears in:</h4>
+            <ul class="left-margin grid character-quest-grid">
+                {% for quest in Character.quests_set.all %}
+                    <li>{{ quest }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+    <section class="margin spell-tags">
+        <h4 class="padding">Tags:</h4><hr/>
+        <ul class="list-none flex flex-row tag-list scroll-snap padding">
+            {% for tag in Character.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="padding spell-user-edits">
         {% if Character.user_edits %}
-            {{ Character.user_edits|safe }}<br/>
+            {{ Character.user_edits|safe }}<br/><hr/><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='characters' itemid=Character.name %}">edit</a>!
     </section>

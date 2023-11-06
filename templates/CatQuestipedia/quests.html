@@ -1,37 +1,33 @@
 {% extends "CatQuestipedia/base-template.html" %}
+{% load static %}
 {% load kebabify %}
 
 {% block title %} Quests {% endblock %}
 
 {% block content %}
-    <h4>{{ game }} Quests</h4>
-    <section>
-        <section>
-            <h5>Main Quests</h5>
-            <div>
-                {% for item in Gameid.quests.all %}
+    <h3 class="margin">{{ game }} Quests</h3>
+    <article>
+        <section class="">
+            <h4 class="margin">Main Quests</h4>
+            <div class="quest-grid flex flex-row">
+                {% for item in game_quests %}
                     {% if item.type == "main" %}
-                        <div>
-                            <a href="{% url "quest-detail" gameid=game questid=item.name %} ">{{ item.name }}</a>
-                        </div>
+                        <a href="{% url "quest-detail" gameid=game questid=item.name %}" class="padding flex flex-center-h flex-center-v">{{ item.name }}</a>
                     {% endif %}
                 {% endfor %}
             </div>
         </section>
-        <section>
-            <h5>Side Quests</h5>
-            <div>
+        <section class="bottom-margin">
+            <h4 class="margin">Side Quests</h4>
                 {% for value in Side_Quest_lines %}
-                    <div>
-                        {% filter_quests_by_line Gameid value as item %}
+                    <p class="quest-line padding flex flex-center-h">{{ value }}</p>
+                    {% filter_quests_by_line Gameid value as item %}
+                    <div class="quest-grid flex flex-row margin">
                         {% for value in item %}
-                            <div>
-                                <a href="{% url "quest-detail" game value.name %}">{{ value.name }}</a>
-                            </div>
+                            <a href="{% url "quest-detail" game value.name %}" class="padding flex flex-center-h flex-center-v">{{ value.name }}</a>
                         {% endfor %}
                     </div>
                 {% endfor %}
-            </div>
         </section>
-    </section>
+    </article>
 {% endblock %}

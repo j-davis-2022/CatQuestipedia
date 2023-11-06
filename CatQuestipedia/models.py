@@ -20,10 +20,18 @@ class Tags(models.Model):
 class Game(models.Model):
     title = models.CharField(max_length=50)
     image = models.ImageField(upload_to="games")
+    map = models.ImageField(upload_to="other", null=True)
     synopsis = models.CharField(max_length=1000, null=True)
     new_features = models.CharField(max_length=500, null=True, blank=True)
     date_released = models.DateField(null=True)
     user_edits = models.CharField(null=True, blank=True)
+    characters_user_edits = models.CharField(null=True, blank=True)
+    enemies_user_edits = models.CharField(null=True, blank=True)
+    equipment_user_edits = models.CharField(null=True, blank=True)
+    spells_user_edits = models.CharField(null=True, blank=True)
+    quests_user_edits = models.CharField(null=True, blank=True)
+    locations_user_edits = models.CharField(null=True, blank=True)
+    mewgame_user_edits = models.CharField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, blank=True)
 
     def __str__(self):
@@ -118,7 +126,9 @@ class Bosses(models.Model):
 
 class Enemies(models.Model):
     name = models.CharField(max_length=50)
-    enemy = models.ImageField(upload_to="enemies", null=True, blank=True)
+    enemy = models.ImageField(upload_to="enemies", null=True, blank=True, height_field="image_height", width_field="image_width")
+    image_height = models.IntegerField(null=True, blank=True)
+    image_width = models.IntegerField(null=True, blank=True)
     attacks = models.CharField(max_length=100)
     weak_to = models.CharField(max_length=100, null=True, blank=True)
     game = models.ForeignKey(Game, related_name="enemies", on_delete=models.CASCADE)
@@ -150,7 +160,9 @@ class Enemies(models.Model):
 
 class Equipment(models.Model):
     name = models.CharField(max_length=50)
-    image = models.ImageField(upload_to="equipment", null=True, blank=True)
+    image = models.ImageField(upload_to="equipment", null=True, blank=True, height_field="image_height", width_field="image_width")
+    image_height = models.IntegerField(null=True, blank=True)
+    image_width = models.IntegerField(null=True, blank=True)
     set = models.CharField(max_length=50, null=True)
     set_type = models.CharField(max_length=10, null=True)
     game = models.ForeignKey(Game, related_name="equipment", on_delete=models.CASCADE)
@@ -345,7 +357,7 @@ class MewGame(models.Model):
     @staticmethod
     def search_rank(query):
         rank = {}
-        query_items = MewGame.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(mode_description=query)).annotate(mode_name=F('name'), description=F('mode_description'), mewgame_tags=ArrayAgg("tags__name")).values("mode_name", "description", "mewgame_tags")
+        query_items = MewGame.objects.filter(Q(name__icontains=query) | Q(tags__name__iexact=query) | Q(mode_description=query)).annotate(mode_name=F('name'), mode_id=F('id'), description=F('mode_description'), mewgame_tags=ArrayAgg("tags__name")).values("mode_name", "mode_id", "description", "mewgame_tags")
         for item in query_items:
             item_rank = 0.0
             if query in item["mode_name"]:
@@ -354,7 +366,7 @@ class MewGame(models.Model):
                 item_rank += 0.75
             if query in item["description"]:
                 item_rank += 0.25
-            rank[item["mode_name"]] = item_rank
+            rank[item["mode_id"]] = item_rank
         rank = sorted(rank.items(), key = lambda x: x[1])
         return rank
 

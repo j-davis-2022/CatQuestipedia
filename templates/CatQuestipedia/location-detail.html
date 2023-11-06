@@ -3,25 +3,77 @@
 {% load kebabify %}
 
 {% block content %}
-    <p>{{ location.name }}: {{ location.type }}</p>
-    <ul>
-        <li>Normal Chests: {{ location.normal_chests }}</li>
-        <li>Key Chests: {{ location.key_chests }}</li>
-        <li>Completion Chests: {{ location.completion_chests }}</li>
-    </ul>
-    <ul>
-        {% for enemy in location.enemies_there.all %}
-            <li>{{ enemy.name }}</li>
-        {% endfor %}
-    </ul>
-    <ul>
-        {% for enemy in location.mew_game_enemy.all %}
-            <li>{{ enemy.name }}</li>
-        {% endfor %}
-    </ul>
-    <section>
+    <h3 class="margin">{{ location.name }}: {{ location.type }}</h3>
+    {% if location.type == 'cave' or location.type == 'ruins' %}
+        <section class="margin location-chests">
+            <h4 class="bottom-padding">Chests</h4><hr/>
+            <p class="big-text margin">
+                There are a few kinds of Chests in the games. Cat Quest has normal chests and key chests. Normal chests can be opened at any time, so long as no monsters are attacking the character. Key chests are similar, but require a key that can only be obtained from the developers after completing their quests. All chests in this game appear in dungeons. Cat Quest II makes a few changes. There are normal chests in dungeons, of course, but key chests are now in the overworld. In addition to this, completion chests were added. Completion chests can only be opened after all monsters in a dungeon have been defeated.
+            </p><hr/>
+            <ul class="margin left-padding flex flex-row">
+                <li>Normal Chests: {{ location.normal_chests }}</li>
+                <li>Key Chests: {{ location.key_chests }}</li>
+                <li>Completion Chests: {{ location.completion_chests }}</li>
+            </ul>
+        </section>
+        <section class="grid location-enemies">
+            <div>
+                <h4 class="bottom-padding">Regular Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in location.enemies_there.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4 class="bottom-padding">Mew Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in location.mew_game_enemy.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    {% elif location.type == 'overworld' %}
+        <section class="grid location-enemies">
+            <div>
+                <h4 class="bottom-padding">Regular Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in location.enemies_there.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4 class="bottom-padding">Mew Game Enemies:</h4><hr/>
+                <ul class="margin left-padding">
+                    {% for enemy in location.mew_game_enemy.all %}
+                        <li>{{ enemy.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    {% elif location.type == 'town' %}
+        <section class="margin location-chests">
+            <h4>Quests</h4><hr/>
+            <ul class="margin left-padding">
+                {% for quest in quests %}
+                    <li><a href="{% url 'quest-detail' gameid=game questid=quest.name %}">{{ quest.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+    <section class="location-tags">
+        <h4 class="padding">Tags:</h4><hr/>
+        <ul class="list-none flex flex-row tag-list scroll-snap padding">
+            {% for tag in location.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="padding location-user-edits">
         {% if location.user_edits %}
-            {{ location.user_edits|safe }}<br/>
+            {{ location.user_edits|safe }}<br/><hr/><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Locations' itemid=location.name %}">edit</a>!
     </section>

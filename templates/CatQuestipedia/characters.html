@@ -4,46 +4,38 @@
 {% block title %} Characters {% endblock %}
 
 {% block content %}
-    <h4>{{ game }} Characters</h4>
-    <div>
-        <h5>Ally Characters</h5>
-        <section>
+    <h3 class="character-header margin">{{ game }} Characters</h3>
+        <h4 class="character-subheader margin">Ally Characters</h4>
+        <section class="flex flex-row character-flex scroll-snap padding margin">
             {% for character in Gameid.characters.all %}
                 {% if character.type == "ally" %}
-                    <div>
-                        <a href="{% url "character-detail" gameid=game characterid=character.name %}">
-                            <img src="{{ character.image.url }}" alt="{{ character.image }}">
-                            <p>{{ character.name }}</p>
-                        </a>
-                    </div>
+                    <a href="{% url "character-detail" gameid=game characterid=character.name %}">
+                        <img src="{{ character.image.url }}" alt="{{ character.image }}" height="{{ character.image.height }}" width="{{ character.image.width }}"/>
+                        <p>{{ character.name }}</p>
+                    </a>
                 {% endif %}
             {% endfor %}
         </section>
-        <h5>Enemy Characters</h5>
-        <section>
+        <h4 class="character-subheader margin">Enemy Characters</h4>
+        <section class="flex flex-row character-flex scroll-snap padding margin">
             {% for character in Gameid.characters.all %}
                 {% if character.type == "enemy" %}
-                    <div>
-                        <a href="{% url "character-detail" gameid=game characterid=character.name %}">
-                            <img src="{{ character.image.url }}" alt="{{ character.name }}">
-                            <p>{{ character.name }}</p>
-                        </a>
-                    </div>
+                    <a href="{% url "character-detail" gameid=game characterid=character.name %}">
+                        <img src="{{ character.image.url }}" alt="{{ character.name }}" height="{{ character.image.height }}" width="{{ character.image.width }}"/>
+                        <p>{{ character.name }}</p>
+                    </a>
                 {% endif %}
             {% endfor %}
         </section>
-        <h5>Side Characters</h5>
-        <section>
+        <h4 class="character-subheader margin">Side Characters</h4>
+        <section class="flex flex-row character-flex scroll-snap padding margin">
             {% for character in Gameid.characters.all %}
                 {% if character.type == "side" %}
-                    <div>
-                        <a href="{% url "character-detail" gameid=game characterid=character.name %}">
-                        <img src="{{ character.image.url }}" alt="{{ character.name }}">
+                    <a href="{% url "character-detail" gameid=game characterid=character.name %}">
+                        <img src="{{ character.image.url }}" alt="{{ character.name }}" height="{{ character.image.height }}" width="{{ character.image.width }}"/>
                         <p>{{ character.name }}</p>
-                        </a>
-                    </div>
+                    </a>
                 {% endif %}
             {% endfor %}
         </section>
-    </div>
 {% endblock %}

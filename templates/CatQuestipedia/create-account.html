@@ -14,7 +14,7 @@
                     {% comment %} <input placeholder="email..." type="text"/> {% endcomment %}
                     {{ form.email }}
                 </div>
-                <div class="left-padding left-margin">{{ form.email.help_text }}</div>
+                <div class="left-padding left-margin reminder-list">{{ form.email.help_text }}</div>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.email }}
                 </div><hr/>
@@ -23,7 +23,7 @@
                     {{ form.username }}
                     {% comment %} <input placeholder="username..." type="text"/> {% endcomment %}
                 </div>
-                <p class="left-padding">{{ form.username.help_text }}</p>
+                <p class="left-padding reminder-list">{{ form.username.help_text }}</p>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.username }}
                 </div><hr/>
@@ -32,7 +32,7 @@
                     {{ form.password1 }}
                     {% comment %} <input placeholder="password..." type="password"/> {% endcomment %}
                 </div>
-                <div class="left-padding left-margin">{{ form.password1.help_text }}</div>
+                <div class="left-padding left-margin reminder-list">{{ form.password1.help_text }}</div>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.password1 }}
                 </div><hr/>
@@ -41,7 +41,7 @@
                     {{ form.password2 }}
                     {% comment %} <input placeholder="password..." type="password"/> {% endcomment %}
                 </div>
-                <p class="left-padding">{{ form.password2.help_text }}</p>
+                <p class="left-padding reminder-list">{{ form.password2.help_text }}</p>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.password2 }}
                 </div><hr/>

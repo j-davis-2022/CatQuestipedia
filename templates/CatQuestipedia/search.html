@@ -24,7 +24,7 @@
                 {% for result, values in value.items %}
                     {% if values.url_param_2 != "none" %}
                         <li class="search-item">
-                            <a href="{% url values.url_name values.url_param_1 values.url_param_2 %}">{{ result.name }}</a><br/>
+                            <a href="{% url values.url_name values.url_param_1 values.url_param_2 %}">{{ result }}</a><br/>
                             <p>Tags: </p>
                             <ul class="list-none flex flex-row tag-list scroll-snap">
                                 {% for tag in values.tags %}

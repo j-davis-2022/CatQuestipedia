@@ -3,10 +3,13 @@
 {% load kebabify %}
 
 {% block content %}
-    {% for item in Gameid.enemies.all %}
-        <a href="{% url "enemy-detail" gameid=game enemyid=item.name %}">
-            <img src="{{ item.enemy.url }}" alt="{{ item.name }}"/>
-            <p>{{ item.name }}</p>
-        </a>
-    {% endfor %}
+    <h3 class="margin">Enemies</h3>
+    <section class="flex flex-row enemy-flex margin">
+        {% for item in Gameid.enemies.all %}
+            <a href="{% url "enemy-detail" gameid=game enemyid=item.name %}">
+                <img src="{{ item.enemy.url }}" alt="{{ item.name }}"  height="{{ item.enemy.height }}" width="{{ item.enemy.width }}"/>
+                <p>{{ item.name }}</p>
+            </a>
+        {% endfor %}
+    </section>
 {% endblock %}

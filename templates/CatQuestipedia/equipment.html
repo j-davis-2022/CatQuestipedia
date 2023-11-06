@@ -5,82 +5,71 @@
 {% block title %} Equipment {% endblock %}
 
 {% block content %}
-    <h4>{{ game }} Equipment</h4>
-    <div>
-        <section>
-            <h5>Headgear</h5>
+    <h3 class="margin">{{ game }} Equipment</h3>
+    <h4 class="equipment-header padding">Full Sets</h4>
+    <div class="grid equipment-grid">
+        <section class="equipment-border">
+            <h5 class="equipment-subheader padding">Headgear</h5>
             {% for item in Gameid.equipment.all|order_db:"set" %}
                 {% if item.type == "Headgear" and item.set_type == "full" %}
-                    <div>
-                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}">
-                             <img src="{{ item.image.url }}" alt="{{ item.name }}">
-                            <p>{{ item.name }}</p>
-                        </a>
-                    </div>
+                    <a href="{% url "equipment-item" gameid=game itemid=item.name %}" class="relative equipment-link" style="height: calc({{ height }}px + 1rem + 2em);">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" style="bottom: calc(1rem + 2em); left: calc(50% - calc({{ item.image_width }}px / 2));">
+                        <p>{{ item.name }}</p>
+                    </a>
                 {% endif %}
             {% endfor %}
         </section>
-        <section>
-            <h5>Armor</h5>
+        <section class="equipment-border">
+            <h5 class="equipment-subheader padding">Armor</h5>
             {% for item in Gameid.equipment.all|order_db:"set" %}
                 {% if item.type == "Armor" and item.set_type == "full" %}
-                    <div>
-                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}">
-                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}" class="relative equipment-link" style="height: calc({{ height }}px + 1rem + 2em);">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="bottom: calc(1rem + 1.5em); left: calc(50% - calc({{ item.image_width }}px / 2));">
                             <p>{{ item.name }}</p>
                        </a>
-                    </div>
                 {% endif %}
             {% endfor %}
         </section>
         <section>
-            <h5>Weapons</h5>
+            <h5 class="equipment-subheader padding">Weapons</h5>
             {% for item in Gameid.equipment.all|order_db:"set" %}
                 {% if item.type == "Weapon" and item.set_type == "full" %}
-                    <div>
-                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}">
-                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}" class="relative equipment-link" style="height: calc({{ height }}px + 1rem + 2em);">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="bottom: calc(1rem + 1.5em); left: calc(50% - calc({{ item.image_width }}px / 2));">
                             <p>{{ item.name }}</p>
                        </a>
-                    </div>
                 {% endif %}
             {% endfor %}
         </section>
     </div>
     <section>
-        <h5>Incomplete Sets</h5>
-        <section>
+        <h4 class="equipment-header padding">Incomplete Sets</h4>
+        <section class="grid equipment-grid">
             {% for value in Not_full_set %}
-                <section>
-                    {% filter_equipment_by_set Gameid.id value as item %}
-                    {% for value in item %}
-                        <div>
-                            <a href="{% url "equipment-item" gameid=game itemid=value.name %}">
-                                <img src="{{ value.image.url }}" alt="{{ value.name }}">
-                                <p>{{ value.name }}</p>
-                           </a>
-                        </div>
-                    {% endfor %}
-                    {% empty %}
-                    <h6>There are no sets of equipment that do not contain all elements (headgear, armor, weapon) in this game.</h6>
-                </section>
+                {% filter_equipment_by_set Gameid.id value as item %}
+                {% for value in item %}
+                        <a href="{% url "equipment-item" gameid=game itemid=value.name %}" class="relative equipment-link" style="height: calc({{ height }}px + 1rem + 2em);">
+                            <img src="{{ value.image.url }}" alt="{{ value.name }}" style="bottom: calc(1rem + 1.5em); left: calc(50% - calc({{ value.image_width }}px / 2));">
+                            <p>{{ value.name }}</p>
+                       </a>
+                {% endfor %}
+                {% empty %}
+                <p class="padding center-text">There are no sets of equipment that do not contain all elements (headgear, armor, weapon) in this game.</p>
             {% endfor %}
         </section>
     </section>
     <section>
-        <h5>Individual Items</h5>
-        <section>
+        <h4 class="equipment-header padding">Individual Items</h4>
+        <section class="flex flex-row equipment-flex">
             {% for item in Gameid.equipment.all %}
                 {% if item.set_type == "none" %}
-                    <div>
-                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}">
-                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <a href="{% url "equipment-item" gameid=game itemid=item.name %}" class="relative" style="height: calc({{ height }}px + 1rem + 2em);">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="bottom: calc(1rem + 1.5em); left: calc(50% - calc({{ item.image_width }}px / 2));">
                             <p>{{ item.name }}</p>
                        </a>
-                    </div>
                 {% endif %}
                 {% empty %}
-                <h6>There are no pieces of equipment that don't belong to any kind of set in this game.</h6>
+                <p class="padding center-text">There are no pieces of equipment that don't belong to any kind of set in this game.</p>
             {% endfor %}
         </section>
     </section>

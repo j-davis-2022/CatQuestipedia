@@ -138,8 +138,8 @@ def search(response):
             mewgame_search_results = {}
             for iteration in searched:
                 for key, value in MewGame.search_rank(iteration):
-                    item = MewGame.objects.get(name=key)
-                    mewgame_search_results[item] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.name}
+                    item = MewGame.objects.get(id=key)
+                    mewgame_search_results[item.name] = {"rank": value, "tags": item.all_tags(), "url_name": "mewgame-detail", "url_param_1": item.game, "url_param_2": item.name}
             search_results["MewGame"] = mewgame_search_results
     return render(response, 'CatQuestipedia/search.html', {"Game": games, "searched_for": searched, "search": search_results,"modified": datestamp, })
 
@@ -167,17 +167,19 @@ def enemies(response, gameid):
 def enemy_detail(response, gameid, enemyid):
     gameidvar = Game.objects.get(title=gameid)
     enemy = Enemies.objects.get(name=enemyid, game=gameidvar)
-    return render(response, 'CatQuestipedia/enemy-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "enemy": enemy,"modified": datestamp, })
+    attacks = enemy.attacks.split(", ")
+    return render(response, 'CatQuestipedia/enemy-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "enemy": enemy, "attacks": attacks, "modified": datestamp, })
 
 
 def equipment(response, gameid):
     gameidvar = Game.objects.get(title=gameid)
     values = []
+    height = Equipment.objects.filter(game=gameidvar).order_by("-image_height")[:1]
     for item in Equipment.objects.filter(game=gameidvar).filter(set_type="not full").values():
         if item["set"] not in values:
             value = item["set"]
             values.append(value)
-    return render(response, 'CatQuestipedia/equipment.html', {"game": str(gameid), "Gameid": gameidvar, "Game": games, "Not_full_set": values, "modified": datestamp})
+    return render(response, 'CatQuestipedia/equipment.html', {"game": str(gameid), "Gameid": gameidvar, "Game": games, "height": height[0].image_height, "Not_full_set": values, "modified": datestamp})
 
 
 def equipmentitem(request, gameid, itemid):
@@ -249,12 +251,13 @@ def spell_detail(request, gameid, spellid):
 
 def quests(response, gameid):
     game = Game.objects.values()
-    game_quests = Game.objects.get(title=gameid)
+    gameidvar = Game.objects.get(title=gameid)
+    game_quests = Quests.objects.filter(game=gameidvar)
     values = []
-    for item in Quests.objects.filter(game=game_quests).filter(type="side").values():
+    for item in Quests.objects.filter(game=gameidvar).filter(type="side").values():
         if item["quest_line"] not in values:
             values.append(item["quest_line"])
-    return render(response, 'CatQuestipedia/quests.html', {"game": str(gameid), "Game": game, "Gameid": game_quests, "Side_Quest_lines": values, "modified": datestamp, })
+    return render(response, 'CatQuestipedia/quests.html', {"game": str(gameid), "Game": game, "Gameid": gameidvar, "game_quests": game_quests, "Side_Quest_lines": values, "modified": datestamp, })
 
 
 def quest_detail(request, gameid, questid):
@@ -297,7 +300,8 @@ def locations(response, gameid):
 def location_detail(response, gameid, locationid):
     gameidvar = Game.objects.get(title=gameid)
     location = Locations.objects.filter(game=gameidvar).get(name=locationid)
-    return render(response, 'CatQuestipedia/location-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "location": location, "modified": datestamp, })
+    quests = Quests.objects.filter(game=gameidvar, location=location)
+    return render(response, 'CatQuestipedia/location-detail.html', {"game": str(gameid), "Game": games, "Gameid": gameidvar, "location": location, "quests": quests, "modified": datestamp, })
 
 
 def mewgame(response, gameid):

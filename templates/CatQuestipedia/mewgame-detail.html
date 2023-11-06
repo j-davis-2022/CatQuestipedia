@@ -3,17 +3,28 @@
 {% load kebabify %}
 
 {% block content %}
-    <h3>{{ mode.name }}</h3>
-    <p>{{ mode.mode_description }}</p>
-    {% if mode.rewards == False %}
-        <p>You will not get rewards if you apply this meowdifier to your Mew Game playthrough.</p>
-    {% else %}
-        <p>You will recieve rewards fur completing a Mew Game playthrough with this meowdifier.</p>
-    {% endif %}
-    <section>
-        {% if mode.user_edits %}
-            {{ mode.user_edits|safe }}<br/>
-        {% endif %}
-        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='MewGame' itemid=mode.name %}">edit</a>!
-    </section>
+    <div class="main-height flex flex-center-v">
+        <article class="article-content-2">
+            <section class="margin">
+                <h3>{{ mode.name }}</h3>
+                <p class="margin">{{ mode.mode_description }}</p>
+                {% if mode.rewards == False %}
+                    <p class="margin">You will not get rewards if you apply this meowdifier to your Mew Game playthrough.</p>
+                {% else %}
+                    <p class="margin">You will recieve rewards fur completing a Mew Game playthrough with this meowdifier.</p>
+                {% endif %}
+                <ul class="list-none flex flex-row tag-list scroll-snap">
+                    {% for tag in mode.tags.all %}
+                        <li><a>{{ tag }}</a></li>
+                    {% endfor %}
+                </ul>
+            </section>
+            <section class="padding user-edits">
+                {% if mode.user_edits != None %}
+                    {{ mode.user_edits|safe }}<br/><hr/><br/>
+                {% endif %}
+                Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='MewGame' itemid=mode.name %}">edit</a>!
+            </section>
+        </article>
+    </div>
 {% endblock %}

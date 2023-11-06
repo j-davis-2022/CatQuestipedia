@@ -3,12 +3,61 @@
 {% load kebabify %}
 
 {% block content %}
-    <h3>{{ enemy.name }}</h3>
-    <img src="{{ enemy.enemy.url }}" alt="{{ enemy.name }}"/>
-    <p>{{ enemy.attacks }}</p>
-    <section>
+    <section class="enemy padding margin center-text">
+        <h3>{{ enemy.name }}</h3>
+        <img src="{{ enemy.enemy.url }}" alt="{{ enemy.name }}"/>
+        <p>Attacks:</p>
+        <ul class="margin">
+            {% for attack in attacks %}
+                <li class="">{{ attack }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="enemy padding margin">
+        <h4 class="margin">Locations Found:</h4>
+        <div class="flex flex-row enemy-detail-flex">
+            <section>
+                <h5 class="margin">Regular Game</h5>
+                <ul>
+                    {% for loc in enemy.regulargamelocations.all %}
+                        <li>{{ loc }}</loc>
+                    {% endfor %}
+                </ul>
+            </section>
+            <section>
+                <h5 class="margin">Mew Game</h5>
+                <ul>
+                    {% for loc in enemy.mewgamelocations.all %}
+                        <li>{{ loc }}</loc>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+    </section>
+    <section class="enemy padding margin">
+        <h4 class="margin">Quests:</h4>
+        <div class="flex flex-row enemy-detail-flex">
+            <section>
+                <h5 class="margin">Regular Game</h5>
+                <ul>
+                    {% for loc in enemy.regulargamequests.all %}
+                        <li>{{ loc }}</loc>
+                    {% endfor %}
+                </ul>
+            </section>
+            <section>
+                <h5 class="margin">Mew Game</h5>
+                <ul>
+                    {% for loc in enemy.mewgamequests.all %}
+                        <li>{{ loc }}</loc>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+    </section>
+    <section class="enemy padding margin">
         {% if enemy.user_edits %}
-            {{ enemy.user_edits|safe }}<br/>
+            {{ enemy.user_edits|safe }}<br/><hr/><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Enemies' itemid=enemy.name %}">edit</a>!
     </section>

@@ -5,37 +5,53 @@
 {% block title %} {{ item.name }} {% endblock %}
 
 {% block content %}
-    <h4>{{ item.name }}</h4>
-    <div>
-        <img src="{{ item.image.url }}" alt="{{ item.name }}">
-        <p>Defense: {{ item.defense }}</p>
-        <p>Health: {{ item.health }}</p>
-        <p>Physical Attack: {{ item.physicalattack }}</p>
-        <p>Magic: {{ item.magic }}</p>
+    <section class="margin spell-details flex flex-row">
+        <section class="spell-details-first-half">
+            <h4 class="margin">{{ item.name }}</h4><hr/>
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="margin"><hr/>
+            <div class="margin">
+                <p>Defense: {{ item.defense }}</p>
+                <p>Health: {{ item.health }}</p>
+                <p>Physical Attack: {{ item.physicalattack }}</p>
+                <p>Magic: {{ item.magic }}</p>
+                <p>Other Buffs: {{ item.otherbuffs }}</p>
+                <p>Other Debuffs: {{ item.otherdebuffs }}</p>
+            </div>
+        </section>
+        <section class="spell-details-second-half">
         {% if user.is_authenticated %}
-            <form method="POST">
+            <form method="POST" class="spell-form">
                 {% csrf_token %}
-                <label>Do I own this item?</label>
-                <input type="checkbox" name="{{ item.name }}1" class="equipment_owned_input"/>
                 <label>Select a playthrough:</label>
                 <select name="{{ item.name }}2" onchange="updateLvl()" class="playthrough-selector">
                     <option value="" selected disabled hidden>Select a Playthrough:</option>
                     {% for playthrough in user_playthroughs %}
                         <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
                     {% endfor %}
-                </select>
+                </select><hr/>
+                <label>Do I own this item?</label>
+                <input type="checkbox" name="{{ item.name }}1" class="equipment_owned_input"/>
                 <label>Item's Level</label>
-                <input type="number" min="1" max="{{ item.maxlvl }}" name="{{ item.name }}3" class="equipment_level_input"/>
-                <button type="submit" value="Save" title="save">Save</button>
+                <input type="number" min="1" max="{{ item.maxlvl }}" name="{{ item.name }}3" class="equipment_level_input"/><hr/>
+                <input type="submit" value="Save" title="save" class="margin"/>
             </form>
         {% else %}
             <p>Log in to track your equipment and their levels!</p>
         {% endif %}
-        <section>
-            {% if item.user_edits %}
-                {{ item.user_edits|safe }}<br/>
-            {% endif %}
-            Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='equipment' itemid=item.name %}">edit</a>!
         </section>
-    </div>
+    </section>
+    <section class="spell-tags">
+        <h4 class="padding">Tags:</h4><hr/>
+        <ul class="list-none flex flex-row tag-list scroll-snap padding">
+            {% for tag in item.tags.all %}
+                <li><a>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="padding spell-user-edits">
+        {% if item.user_edits %}
+            {{ item.user_edits|safe }}<br/><hr/><br/>
+        {% endif %}
+        Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='equipment' itemid=item.name %}">edit</a>!
+    </section>
 {% endblock %}
