@@ -3,16 +3,26 @@
 {% load kebabify %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            <input placeholder="Playthrough Name" type="text" name="playthrough-name"/>
-            <select name="playthrough-game">
-                {% for item in Game %}
-                    <option name="{{ item.title }}">{{ item.title }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Submit"/>
-        </form>
-    {% endif %}
+    <div class="main-height flex flex-center-v">
+        {% if user.is_authenticated %}
+            <form method="POST" class="article-content-2 padding flex flex-center-h flex-column eighty-width">
+                {% csrf_token %}
+                <div class="margin">
+                    <label>Playthrough Name:</label>
+                    <input type="text" name="playthrough-name"/>
+                </div><hr/>
+                <div class="margin">
+                    <label>Game:</label>
+                    <select name="playthrough-game">
+                        {% for item in Game %}
+                            <option name="{{ item.title }}">{{ item.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div><hr/>
+                <input type="submit" value="Submit" class="margin"/>
+            </form>
+        {% else %}
+        {% comment %} Something here. {% endcomment %}
+        {% endif %}
+    </div>
 {% endblock %}

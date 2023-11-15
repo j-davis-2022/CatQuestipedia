@@ -6,40 +6,51 @@
     <h3 class="padding">Profile Page</h3>
     {% if user.is_authenticated %}
         {% for playthrough in playthroughs %}
-            <a class="margin playthrough-card" href="{% url 'mass_update' id=playthrough.playthrough.id %}">
-                <h4>{{ playthrough.playthrough.name }}: {{ playthrough.playthrough.game }}</h4>
-                <h5>Completion Level: {{ playthrough.completeness }}%</h5>
-                <section>
-                    <h5>Equipment</h5>
-                    <div class="flex flex-row">
-                        {% for user_equipment in playthrough.playthrough.user_equipment.all %}
-                            <div class="padding">
-                                {% with 'images/equipment/'|add:user_equipment.equipment.image  as image_static %}
-                                    <img src="{% static image_static %}" alt="{{ user_equipment.equipment }}" class="padding profile-equipment-img"/>
-                                {% endwith %}
-                                <p class="flex flex-center-h">{{ user_equipment.equipment }}</p>
+            <a class="margin playthrough-card" href="{% url 'mass_update' id=playthrough.id %}">
+                <h4>{{ playthrough.name }}: {{ playthrough.game }}</h4>
+                <h4>Completion Level: {{ playthroughs|get_dict_value:playthrough|get_dict_value:'total' }}%</h5>
+                <details class="margin">
+                    <summary>
+                        Equipment: {{ playthroughs|get_dict_value:playthrough|get_dict_value:'equipment' }}%
+                    </summary>
+                    <div class="tag-list flex flex-row scroll-snap">
+                        {% for user_equipment in playthrough.user_equipment.all %}
+                            <div class="max-content profile-equipment-img" style="height: calc({{ height }}px + 1rem + 5em);">
+                                <img src="{{ user_equipment.equipment.image.url }}" alt="{{ user_equipment.equipment }}" class="padding" style="bottom: calc(1rem + 2em); left: calc(50% - calc(calc({{ user_equipment.equipment.image_width }}px + 2em) / 2));"/>
+                                <p class="padding">{{ user_equipment.equipment }}</p>
                             </div>
-                            {% empty %}
+                        {% empty %}
                             <p class="padding">You don't have any equipment in this playthrough yet.</p>
                         {% endfor %}
                     </div>
-                </section>
-                <section>
-                    <h5>Spells</h5>
-                    {% for user_spell in playthrough.playthrough.user_spells.all %}
-                        <p>{{ user_spell.spell }}</p>
+                </details>
+                <details class="margin">
+                    <summary>
+                        Spells: {{ playthroughs|get_dict_value:playthrough|get_dict_value:'spells' }}%
+                    </summary>
+                    <div class="tag-list flex flex-row scroll-snap">
+                        {% for user_spell in playthrough.user_spells.all %}
+                            <div class="padding profile-spell-img">
+                                <img src="{{ user_spell.spell.image.url }}" alt="{{ user_spell.spell }}" class="padding auto-margin"/>
+                                <p>{{ user_spell.spell }}</p>
+                            </div>
                         {% empty %}
-                        <p class="padding">You haven't learned any spells in this playthrough yet.</p>
-                    {% endfor %}
-                </section>
-                <section>
-                    <h5>Quests</h5>
-                    {% for user_quest in playthrough.playthrough.user_quests.all %}
-                        <p>{{ user_quest.quest }}</p>
+                            <p class="padding">You haven't learned any spells in this playthrough yet.</p>
+                        {% endfor %}
+                    </div>
+                </details>
+                <details class="margin">
+                    <summary>
+                        Quests: {{ playthroughs|get_dict_value:playthrough|get_dict_value:'quests' }}%
+                    </summary>
+                    <div class="tag-list flex flex-row scroll-snap">
+                        {% for user_quest in playthrough.user_quests.all %}
+                            <p class="padding profile-spell-img center-text">{{ user_quest.quest }}</p>
                         {% empty %}
-                        <p class="padding">You haven't completed any quests in this playthrough yet.</p>
-                    {% endfor %}
-                </section>
+                            <p class="padding">You haven't completed any quests in this playthrough yet.</p>
+                        {% endfor %}
+                    </div>
+                </details>
             </a>
         {% endfor %}
         <a href="{% url 'new_playthrough' %}" class="margin playthrough-card">Create a New Playthrough</a>

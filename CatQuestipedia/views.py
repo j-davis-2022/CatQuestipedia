@@ -35,6 +35,25 @@ for item in Game.objects.all():
          game_lvl += value.maxlvl
     complete_lvl[item] = game_lvl
 
+e_complete_lvl = {}
+for item in Game.objects.all():
+    game_lvl = Equipment.objects.filter(game=item).count()
+    for value in Equipment.objects.filter(game=item).all():
+        game_lvl += value.maxlvl
+    e_complete_lvl[item] = game_lvl
+
+s_complete_lvl = {}
+for item in Game.objects.all():
+    game_lvl = Spells.objects.filter(game=item).count()
+    for value in Spells.objects.filter(game=item):
+         game_lvl += value.maxlvl
+    s_complete_lvl[item] = game_lvl
+
+q_complete_lvl = {}
+for item in Game.objects.all():
+    game_lvl = Quests.objects.filter(game=item).count()
+    q_complete_lvl[item] = game_lvl
+
 games = Game.objects.values()
 
 # Create your views here.
@@ -63,21 +82,35 @@ def profile(request):
     user = request.user
     if user.is_authenticated:
         playthroughs = Playthroughs.objects.filter(user=user)
-        playthroughs_list = []
+        playthroughs_list = {}
+        height = Equipment.objects.all().order_by("-image_height")[:1]
+        print(height[0].image_height)
         for item in playthroughs:
             max_completion = complete_lvl[item.game]
+            e_max_completion = e_complete_lvl[item.game]
+            s_max_completion = s_complete_lvl[item.game]
+            q_max_completion = q_complete_lvl[item.game]
             completion = item.user_equipment.count()
+            e_completion = item.user_equipment.count()
+            s_completion = item.user_spells.count()
+            q_completion = item.user_quests.count()
             completion += item.user_spells.count()
             completion += item.user_quests.count()
             for value in item.user_equipment.all():
                 completion += value.equipment_level
+                e_completion += value.equipment_level
             for value in item.user_spells.all():
                 completion += value.spell_level
+                s_completion += value.spell_level
             completion = 100*completion/max_completion
-            playthroughs_list.append({"playthrough": item, "completeness": completion})
+            e_completion = 100*e_completion/e_max_completion
+            s_completion = 100*s_completion/s_max_completion
+            q_completion = 100*q_completion/q_max_completion
+            playthroughs_list[item] = {"total": completion, "equipment": e_completion, "spells": s_completion, "quests": q_completion, }
     else:
-        playthroughs_list = []
-    return render(request, 'CatQuestipedia/profile.html', {"Game": games, "modified": datestamp, "playthroughs": playthroughs_list, })
+        playthroughs_list = {}
+        height = [0]
+    return render(request, 'CatQuestipedia/profile.html', {"Game": games, "modified": datestamp, "playthroughs": playthroughs_list, "height": height[0].image_height, }) #type: ignore
 
 def search(response):
     searched = ""
@@ -383,7 +416,7 @@ def mass_update(request, id):
                     new.save()
                     playthrough.user_quests.add(new)
                     playthrough.save()
-    return render(request, 'CatQuestipedia/mass-update.html', {"Game": games, "modified": datestamp, "equipment": equipment, "spells": spells, "quests": quests, "owned_equipment": owned_equipment, "known_spells": known_spells, "completed_quests": completed_quests, })
+    return render(request, 'CatQuestipedia/mass-update.html', {"Game": games, "modified": datestamp, "equipment": equipment, "spells": spells, "quests": quests, "owned_equipment": owned_equipment, "known_spells": known_spells, "completed_quests": completed_quests, "playthrough": playthrough, })
 
 def new_playthrough(request):
     if request.method == "POST":

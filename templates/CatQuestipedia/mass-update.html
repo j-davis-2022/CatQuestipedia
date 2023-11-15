@@ -3,7 +3,8 @@
 {% load kebabify %}
 
 {% block content %}
-    <section class="padding tab-btns">
+    <h3 class="margin">{{ playthrough.name }}: {{ playthrough.game }}</h3>
+    <section class="tab-btns">
         <button onClick="openTab('equipment')">
             <h4>Equipment</h4>
         </button>
@@ -14,29 +15,53 @@
             <h4>Quests</h4>
         </button>
     </section>
-    <form method="POST">
+    <form method="POST" class="mass-form">
         {% csrf_token %}
         <article class="padding tab-content" value="equipment">
             {% for item in equipment %}
-                <img src="{{ item.image.url }}" alt="{{ item.name }}">
-                <p>{{ item.name }}<p>
-                <input type="checkbox" name="equipment-{{ item.name }}1" {% if item.id in owned_equipment.keys %} checked {% endif %}/>
-                <input type="number" name="equipment-{{ item.name }}2" {% if item.id in owned_equipment.keys %} placeholder="{{ owned_equipment|get_dict_value:item.id }}" {% else %} placeholder="{{ item.name }}" {% endif %}/>
+                <section class="grid">
+                    <div class="padding mass-update-equipment">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" width="{{ item.image_width }}" height="{{ item.image_height }}"/>
+                        <p>{{ item.name }}<p>
+                    </div>
+                    <div class="padding">
+                        <label>Owned: </label>
+                        <input type="checkbox" name="equipment-{{ item.name }}1" {% if item.id in owned_equipment.keys %} checked {% endif %}/>
+                        <label>Level: </label>
+                        <input type="number" name="equipment-{{ item.name }}2" {% if item.id in owned_equipment.keys %} value="{{ owned_equipment|get_dict_value:item.id }}" {% else %} placeholder="{{ item.name }}" {% endif %}/>
+                    </div>
+                </section>
             {% endfor %}
         </article>
         <article class="padding tab-content" value="spells">
             {% for item in spells %}
-                <p>{{ item.name }}<p>
-                <input type="checkbox" name="spells-{{ item.name }}1" {% if item.id in known_spells.keys %} checked {% endif %}/>
-                <input type="number" name="spells-{{ item.name }}2" {% if item.id in known_spells.keys %} placeholder="{{ known_spells|get_dict_value:item.id }}" {% else %} placeholder="{{ item.name }}" {% endif %}/>
+                <section class="grid">
+                    <div class="padding mass-update-equipment">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" width="{{ item.image.width }}" height="{{ item.image.height }}"/>
+                        <p>{{ item.name }}<p>
+                    </div>
+                    <div class="padding">
+                        <label>Known: </label>
+                        <input type="checkbox" name="spells-{{ item.name }}1" {% if item.id in known_spells.keys %} checked {% endif %}/>
+                        <label>Level: </label>
+                        <input type="number" name="spells-{{ item.name }}2" {% if item.id in known_spells.keys %} value="{{ known_spells|get_dict_value:item.id }}" {% else %} placeholder="{{ item.name }}" {% endif %}/>
+                    </div>
+                </section>
             {% endfor %}
         </article>
         <article class="padding tab-content" value="quests">
             {% for item in quests %}
-                <p>{{ item.name }}<p>
-                <input type="checkbox" name="{{ item.name }}" {% if item in completed_quests %} checked {% endif %}/>
+                <section class="flex flex-row mass-quests">
+                    <div class="padding max-content">
+                        <p>{{ item.name }} ({{ item.quest_line }}: {{ item.quest_number }})<p>
+                    </div>
+                    <div class="padding max-content-2">
+                        <label>Completed: </label>
+                        <input type="checkbox" name="{{ item.name }}" {% if item in completed_quests %} checked {% endif %}/>
+                    </div>
+                </section>
             {% endfor %}
         </article>
-        <input type="submit" value="submit"/>
+        <input type="submit" value="Submit" class="margin mass-submit"/>
     </form>
 {% endblock %}
