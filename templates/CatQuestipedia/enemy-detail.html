@@ -57,7 +57,7 @@
     </section>
     <section class="enemy padding margin">
         {% if enemy.user_edits %}
-            {{ enemy.user_edits|safe }}<br/><hr/><br/>
+            {{ enemy.user_edits|safe }}<br/><hr><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='Enemies' itemid=enemy.name %}">edit</a>!
     </section>

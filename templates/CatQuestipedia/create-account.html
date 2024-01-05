@@ -6,7 +6,7 @@
     <article class="padding create-account-background">
         <section class="padding create-account">
             <h3 class="bottom-padding">Create Account:</h3>
-            <p>Why create an account? Track your progress in the Cat Quest Games! Keep tabs on what equipment and spells you have, their levels, and the quests you've completed!</p><hr/>
+            <p>Why create an account? Track your progress in the Cat Quest Games! Keep tabs on what equipment and spells you have, their levels, and the quests you've completed!</p><hr>
             <form class="create-account-form" method="POST">
                 {% csrf_token %}
                 <div class="grid create-account-input">
@@ -17,7 +17,7 @@
                 <div class="left-padding left-margin reminder-list">{{ form.email.help_text }}</div>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.email }}
-                </div><hr/>
+                </div><hr>
                 <div class="grid create-account-input">
                     <label class="padding">Username: *</label>
                     {{ form.username }}
@@ -26,7 +26,7 @@
                 <p class="left-padding reminder-list">{{ form.username.help_text }}</p>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.username }}
-                </div><hr/>
+                </div><hr>
                 <div class="grid create-account-input">
                     <label class="padding">Password: *</label>
                     {{ form.password1 }}
@@ -35,7 +35,7 @@
                 <div class="left-padding left-margin reminder-list">{{ form.password1.help_text }}</div>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.password1 }}
-                </div><hr/>
+                </div><hr>
                 <div class="grid create-account-input">
                     <label class="padding">Confirm Password: *</label>
                     {{ form.password2 }}
@@ -44,11 +44,11 @@
                 <p class="left-padding reminder-list">{{ form.password2.help_text }}</p>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.password2 }}
-                </div><hr/>
+                </div><hr>
                 <div class="flex flex-center-h">
                     <input type="submit" class="create-account-btn" value="Create Account!"/>
                 </div>
-            </form><hr/>
+            </form><hr>
             <div class="flex flex-center-h flex-center-v">
                 <p>Already have an account? Sign in!</p>
                 <a href="/login" class="button-link left-margin">Log In</a>

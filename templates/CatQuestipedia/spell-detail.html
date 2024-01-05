@@ -5,8 +5,8 @@
 {% block content %}
     <div class="margin spell-details flex flex-row">
         <section class="spell-details-first-half">
-            <h3 class="margin">{{ spell.name }}</h3><hr/>
-            <img src="{{ spell.image.url }}" alt="{{ spell.name }}" class="margin"/><hr/>
+            <h3 class="margin">{{ spell.name }}</h3><hr>
+            <img src="{{ spell.image.url }}" alt="{{ spell.name }}" class="margin"/><hr>
             <p class="margin">{{ spell.effect }}</p>
         </section>
         <section class="spell-details-second-half">
@@ -19,11 +19,11 @@
                             {% for playthrough in user_playthroughs %}
                                 <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
                             {% endfor %}
-                    </select><hr/>
+                    </select><hr>
                     <label>Do I know this spell?</label>
                     <input type="checkbox" name="{{ spell.name }}1" class="spell_known_input"/>
                     <label>Spell's Level</label>
-                    <input type="number" min="1" max="{{ spell.maxlvl }}" name="{{ spell.name }}3" class="spell_level_input"/><hr/>
+                    <input type="number" min="1" max="{{ spell.maxlvl }}" name="{{ spell.name }}3" class="spell_level_input"/><hr>
                     <input type="submit" value="Save" title="save" class="margin"/>
                 </form>
             {% else %}
@@ -32,7 +32,7 @@
         </section>
     </div>
     <section class="spell-tags margin">
-        <h4 class="margin">Tags:</h4><hr/>
+        <h4 class="margin">Tags:</h4><hr>
         <ul class="list-none flex flex-row tag-list scroll-snap padding">
             {% for tag in spell.tags.all %}
                 <li><a>{{ tag }}</a></li>

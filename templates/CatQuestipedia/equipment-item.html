@@ -7,8 +7,8 @@
 {% block content %}
     <section class="margin spell-details flex flex-row">
         <section class="spell-details-first-half">
-            <h4 class="margin">{{ item.name }}</h4><hr/>
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="margin"><hr/>
+            <h4 class="margin">{{ item.name }}</h4><hr>
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="margin"><hr>
             <div class="margin">
                 <p>Defense: {{ item.defense }}</p>
                 <p>Health: {{ item.health }}</p>
@@ -28,11 +28,11 @@
                     {% for playthrough in user_playthroughs %}
                         <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
                     {% endfor %}
-                </select><hr/>
+                </select><hr>
                 <label>Do I own this item?</label>
                 <input type="checkbox" name="{{ item.name }}1" class="equipment_owned_input"/>
                 <label>Item's Level</label>
-                <input type="number" min="1" max="{{ item.maxlvl }}" name="{{ item.name }}3" class="equipment_level_input"/><hr/>
+                <input type="number" min="1" max="{{ item.maxlvl }}" name="{{ item.name }}3" class="equipment_level_input"/><hr>
                 <input type="submit" value="Save" title="save" class="margin"/>
             </form>
         {% else %}
@@ -41,7 +41,7 @@
         </section>
     </section>
     <section class="spell-tags">
-        <h4 class="padding">Tags:</h4><hr/>
+        <h4 class="padding">Tags:</h4><hr>
         <ul class="list-none flex flex-row tag-list scroll-snap padding">
             {% for tag in item.tags.all %}
                 <li><a>{{ tag }}</a></li>
@@ -50,7 +50,7 @@
     </section>
     <section class="padding spell-user-edits">
         {% if item.user_edits %}
-            {{ item.user_edits|safe }}<br/><hr/><br/>
+            {{ item.user_edits|safe }}<br/><hr><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='equipment' itemid=item.name %}">edit</a>!
     </section>

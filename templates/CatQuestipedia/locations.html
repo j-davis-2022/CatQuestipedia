@@ -10,7 +10,7 @@
             Locations are typically places marked on the map in the game. Common locations are towns where you can catnap, dungeons (caves and ruins) where you can defeat monsters and find chests with equipment, as well as coins. In addition to this, notable places in the overworld are also on the list. See below for a list of locations!
         </p>
         <section class="margin">
-            <hr/><h4 class="">Dungeons (Caves):</h4><hr/>
+            <hr><h4 class="">Dungeons (Caves):</h4><hr>
             <ul class="left-margin grid locations-grid">
                 {% for location in Gameid.location.all %}
                     {% if location.type == 'cave' %}
@@ -20,7 +20,7 @@
             </ul>
         </section>
         <section class="margin">
-            <hr/><h4 class="">Dungeons (Ruins):</h4><hr/>
+            <hr><h4 class="">Dungeons (Ruins):</h4><hr>
             <ul class="left-margin grid locations-grid">
                 {% for location in Gameid.location.all %}
                     {% if location.type == 'ruins' %}
@@ -30,7 +30,7 @@
             </ul>
         </section>
         <section class="margin">
-            <hr/><h4 class="">Towns</h4><hr/>
+            <hr><h4 class="">Towns</h4><hr>
             <ul class="left-margin grid locations-grid">
                 {% for location in Gameid.location.all %}
                     {% if location.type == 'town' %}
@@ -40,7 +40,7 @@
             </ul>
         </section>
         <section class="margin">
-            <hr/><h4 class="">Overworld</h4><hr/>
+            <hr><h4 class="">Overworld</h4><hr>
             <ul class="left-margin grid locations-grid">
                 {% for location in Gameid.location.all %}
                     {% if location.type == 'overworld' %}

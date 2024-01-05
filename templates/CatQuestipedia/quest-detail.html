@@ -13,7 +13,7 @@
                     {% for item in tasks %}
                         <li>{{ item }}</li>
                     {% endfor %}
-                </ol><hr/>
+                </ol><hr>
                 <h4 class="margin">Reward(s):</h4>
                 <ul class="margin left-padding">
                     <li>Experience: {{ quest.xpreward }}</li>
@@ -31,9 +31,9 @@
                                 {% for playthrough in user_playthroughs %}
                                     <option class="playthrough-option" value="{{ playthrough.name }}" name="{{ playthrough_levels|get_dict_value:playthrough.name }}">{{ playthrough.name }}</option>
                                 {% endfor %}
-                        </select><hr/>
+                        </select><hr>
                         <label class="margin">Completed?</label>
-                        <input type="checkbox" name="{{ quest.name }}2" class="quest-completed-input margin"/><hr/>
+                        <input type="checkbox" name="{{ quest.name }}2" class="quest-completed-input margin"/><hr>
                         <input type="submit" value="Save" title="save" class="margin"/>
                     </form>
                 {% else %}
@@ -43,7 +43,7 @@
         </div>
         <section class="grid quest-enemies">
             <div>
-                <h4 class="bottom-padding">Regular Game Enemies:</h4><hr/>
+                <h4 class="bottom-padding">Regular Game Enemies:</h4><hr>
                 <ul class="margin left-padding">
                     {% for enemy in quest.monster_list.all %}
                         <li>{{ enemy.name }}</li>
@@ -51,7 +51,7 @@
                 </ul>
             </div>
             <div>
-                <h4 class="bottom-padding">Mew Game Enemies:</h4><hr/>
+                <h4 class="bottom-padding">Mew Game Enemies:</h4><hr>
                 <ul class="margin left-padding">
                     {% for enemy in quest.mew_game_monster.all %}
                         <li>{{ enemy.name }}</li>

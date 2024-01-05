@@ -21,7 +21,7 @@
             </section>
             <section class="padding user-edits">
                 {% if mode.user_edits != None %}
-                    {{ mode.user_edits|safe }}<br/><hr/><br/>
+                    {{ mode.user_edits|safe }}<br/><hr><br/>
                 {% endif %}
                 Think something's missing? Make an <a href="{% url 'item_edit' gameid=game modelid='MewGame' itemid=mode.name %}">edit</a>!
             </section>

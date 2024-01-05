@@ -5,7 +5,7 @@
 {% block content %}
     <article class="padding create-account-background">
         <section class="padding create-account">
-            <h3 class="bottom-padding">Create Account:</h3><hr/>
+            <h3 class="bottom-padding">Create Account:</h3><hr>
             <form class="create-account-form" method="POST">
                 {% csrf_token %}
                 <div class="grid create-account-input">
@@ -15,7 +15,7 @@
                 <p class="left-padding">{{ form.username.help_text }}</p>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.username }}
-                </div><hr/>
+                </div><hr>
                 <div class="grid create-account-input">
                     <label class="padding">Password: *</label>
                     {{ form.password }}
@@ -23,11 +23,11 @@
                 <div class="left-padding left-margin">{{ form.password1.help_text }}</div>
                 <div class="left-padding left-margin error-message">
                     {{ form.errors.password }}
-                </div><hr/>
+                </div><hr>
                 <div class="flex flex-center-h">
                     <input type="submit" class="create-account-btn" value="Log In"/>
                 </div>
-            </form><hr/>
+            </form><hr>
             <section class="grid forgot-login">
                 <p class="forgot-login-header">Forgot your Username/Password?<br/>
                 <p class="forgot-login-yes-email">If you input your email when creating your account, click here:</p>
@@ -40,7 +40,7 @@
                     For safety reasons, we unfortunately cannot allow you to reset your password.
                 </p>
                 <a href="{% url 'create' %}" class="button-link forgot-login-no-btn">Create (New) Account</a>
-            </section><hr/>
+            </section><hr>
             <div class="flex flex-center-h flex-center-v">
                 <p>Don't have an account? Sign up!</p>
                 <a href="{% url 'create' %}" class="button-link left-margin">Create Account</a>

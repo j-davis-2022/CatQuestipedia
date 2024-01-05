@@ -11,7 +11,7 @@
         <img src="{{ img.url }}" alt="{{ name }} Art" width="200" />
     </section>
     <section class="margin spell-tags">
-        <h4 class="padding">Tags:</h4><hr/>
+        <h4 class="padding">Tags:</h4><hr>
         <ul class="list-none flex flex-row tag-list scroll-snap padding">
             {% for tag in Gameid.tags.all %}
                 <li><a>{{ tag }}</a></li>
@@ -20,7 +20,7 @@
     </section>
     <section class="padding spell-user-edits">
         {% if Gameid.user_edits %}
-            {{ Gameid.user_edits|safe }}<br/><hr/><br/>
+            {{ Gameid.user_edits|safe }}<br/><hr><br/>
         {% endif %}
         Think something's missing? Make an <a href="{% url 'game_edit' gameid=name %}">edit</a>!
     </section>
